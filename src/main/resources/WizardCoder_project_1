@@ -1,0 +1,353 @@
+
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+### Instruction: Create pom.xml and add these dependencies:spring-boot-starter-web, spring-boot-starter-actuator, spring-boot-starter-test, junit-jupiter, spring-boot-starter-data-jpa, springdoc-openapi-starter-webmvc-ui.
+Generate Book class with id, name, yearOfPublushing, language fields. Create BookDTO with the same fields and use @Entity annotation.
+Generate BookService with methods: method register(Book book) that need to save book to database and method getBookByid(Long bookId) to return book with this id;
+Generate BookRepository interface with the same methods as BookService. BookService must use BookRepository in methods.
+Generate BookController class with two methods:
+registerBook(Book book) with '/register' endpoint and getBookByid(Long bookId) with '/get' endpoint, use BookService in these methods for saving book and getting book, 
+use io.swagger for BookController class. Create BookConverter class that convert Book to BookDTO and via verse. Use Converter in BookService in method getBookByid to return Book.
+Create test for BookService methods, use Mockito for tests.
+
+### Response:Here is the pom.xml file with the required dependencies:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>book-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+```
+
+Here is the Book class with the required fields:
+
+```java
+import javax.persistence.*;
+
+@Entity
+public class Book {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    private int yearOfPublushing;
+
+    private String language;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getYearOfPublushing() {
+        return yearOfPublushing;
+    }
+
+    public void setYearOfPublushing(int yearOfPublushing) {
+        this.yearOfPublushing = yearOfPublushing;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+}
+```
+
+Here is the BookDTO class with the same fields:
+
+```java
+public class BookDTO {
+
+    private Long id;
+
+    private String name;
+
+    private int yearOfPublushing;
+
+    private String language;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getYearOfPublushing() {
+        return yearOfPublushing;
+    }
+
+    public void setYearOfPublushing(int yearOfPublushing) {
+        this.yearOfPublushing = yearOfPublushing;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+}
+```
+
+Here is the BookService class with the required methods:
+
+```java
+import org.springframework.stereotype.Service;
+
+import com.example.book.BookConverter;
+import com.example.book.BookRepository;
+import com.example.book.Book;
+
+@Service
+public class BookService {
+
+    private final BookRepository bookRepository;
+
+    private final BookConverter bookConverter;
+
+    public BookService(BookRepository bookRepository, BookConverter bookConverter) {
+        this.bookRepository = bookRepository;
+        this.bookConverter = bookConverter;
+    }
+
+    public Book register(Book book) {
+        return bookRepository.save(book);
+    }
+
+    public Book getBookById(Long bookId) {
+        return bookConverter.convert(bookRepository.findById(bookId).orElseThrow());
+    }
+}
+```
+
+Here is the BookRepository interface with the same methods as BookService:
+
+```java
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.book.Book;
+
+public interface BookRepository extends JpaRepository<Book, Long> {
+
+}
+```
+
+Here is the BookController class with the required methods:
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+import com.example.book.BookService;
+import com.example.book.BookDTO;
+
+@RestController
+@Tag(name = "Book Controller", description = "Book API endpoints")
+public class BookController {
+
+    @Autowired
+    private BookService bookService;
+
+    @Operation(summary = "Register a new book", description = "Register a new book with the given name, year of publication, and language.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Book registered successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BookDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content(mediaType = "text/plain"))
+    })
+    @PostMapping("/register")
+    public BookDTO registerBook(@Parameter(description = "Book object", required = true) @RequestBody BookDTO bookDTO) {
+        return bookService.register(bookDTO).toDTO();
+    }
+
+    @Operation(summary = "Get a book by id", description = "Get a book by its id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Book found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BookDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Book not found", content = @Content(mediaType = "text/plain"))
+    })
+    @GetMapping("/get/{bookId}")
+    public BookDTO getBookById(@Parameter(description = "Book id", required = true) @PathVariable Long bookId) {
+        return bookService.getBookById(bookId).toDTO();
+    }
+}
+```
+
+Here is the BookConverter class that converts Book to BookDTO:
+
+```java
+import org.springframework.core.convert.converter.Converter;
+
+import com.example.book.Book;
+import com.example.book.BookDTO;
+
+public class BookConverter implements Converter<Book, BookDTO> {
+
+    @Override
+    public BookDTO convert(Book source) {
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setId(source.getId());
+        bookDTO.setName(source.getName());
+        bookDTO.setYearOfPublushing(source.getYearOfPublushing());
+        bookDTO.setLanguage(source.getLanguage());
+        return bookDTO;
+    }
+}
+```
+
+Here are the tests for BookService methods:
+
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.example.book.Book;
+import com.example.book.BookConverter;
+import com.example.book.BookRepository;
+import com.example.book.BookService;
+
+@ExtendWith(MockitoExtension.class)
+public class BookServiceTest {
+
+    @Mock
+    private BookRepository bookRepository;
+
+    @InjectMocks
+    private BookService bookService;
+
+    @Test
+    public void register_shouldSaveBookToDatabase() {
+        // given
+        Book book = new Book();
+        book.setName("The Great Gatsby");
+        book.setYearOfPublushing(1925);
+        book.setLanguage("English");
+
+        // when
+        bookService.register(book);
+
+        // then
+        assertEquals(book, bookRepository.save(book));
+    }
+
+    @Test
+    public void getBookById_shouldReturnBook() {
+        // given
+        Book book = new Book();
+        book.setName("The Great Gatsby");
+        book.setYearOfPublushing(1925);
+        book.setLanguage("English");
+
+        when(bookRepository.findById(1L)).thenReturn(java.util.Optional.of(book));
+
+        // when
+        BookDTO bookDTO = bookService.getBookById(1L).toDTO();
+
+        // then
+        assertEquals(book.getId(), bookDTO.getId());
+        assertEquals(book.getName(), bookDTO.getName());
+        assertEquals(book.getYearOfPublushing(), bookDTO.getYearOfPublushing());
+        assertEquals(book.getLanguage(), bookDTO.getLanguage());
+    }
+}
+```
+
+Note: The tests use Mockito to mock the BookRepository and BookConverter classes.
+================================================================

@@ -1,0 +1,124 @@
+
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+### Instruction: Create pom.xml and add these dependencies:spring-boot-starter-web, spring-boot-starter-actuator, spring-boot-starter-test, junit-jupiter, spring-boot-starter-data-jpa, springdoc-openapi-starter-webmvc-ui.
+Generate Book class with id, name, yearOfPublushing, language fields. Create BookDTO with the same fields and use @Entity annotation.
+Generate BookService with methods: method register(Book book) that need to save book to database and method getBookByid(Long bookId) to return book with this id;
+Generate BookRepository interface with the same methods as BookService. BookService must use BookRepository in methods.
+Generate BookController class with two methods:
+registerBook(Book book) with '/register' endpoint and getBookByid(Long bookId) with '/get' endpoint, use BookService in these methods for saving book and getting book, 
+use io.swagger for BookController class. Create BookConverter class that convert Book to BookDTO and via verse. Use Converter in BookService in method getBookByid to return Book.
+Create test for BookService methods, use Mockito for tests.
+
+### Response:Here is the pom.xml file with the required dependencies:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>book-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+```
+
+Here is the Book class with the required fields:
+
+```java
+import javax.persistence.*;
+
+@Entity
+public class Book {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    private int yearOfPublushing;
+
+    private String language;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getYearOfPublushing() {
+        return yearOfPublushing;
+    }
+
+    public void setYearOfPublushing(int yearOfPublushing) {
+        this.yearOfPublushing = yearOfPublushing;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+}
+```

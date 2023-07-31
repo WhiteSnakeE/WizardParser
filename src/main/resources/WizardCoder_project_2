@@ -1,0 +1,928 @@
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create pom.xml and add these dependencies:spring-boot-starter-web, spring-boot-starter-test, junit-jupiter, spring-boot-starter-data-jpa, cucumber-junit, cucumber-spring, cucumber-java, cucumber-junit-platform-engine. Add versions for cucumber dependencies
+
+        ### Response:Here is the pom.xml file with the added dependencies:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>myproject</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.7.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>6.10.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>2.4.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>6.10.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>6.10.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
+```
+
+Note: Make sure to replace `com.example` with your own group id and `myproject` with your own artifact id.
+================================================================
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create POJO Java classes according to the diagram:
+        @startuml
+
+        entity Book {
+            id: long
+            name: string
+            language: string
+            yearOfPublishing: int
+        }
+
+        entity Author {
+            id: long
+            firstName: string
+            lastName: string
+            nationality: string
+        }
+
+        enum Genre {
+            SCIENCE_FICTION
+            FANTASY
+            HORROR
+            TECHNICAL_WRITING
+            EROTIC_FICTION
+            WESTERN
+            OTHER
+        }
+
+        Book "1..N" -o "1" Author: book
+        Book "1" o- "1..N" Genre: genre
+        Author "1" o- "1..N" Genre: genre
+        Author "1..1" -o "1" Book: author
+
+        @enduml
+
+        ### Response:Here are the POJO Java classes that correspond to the diagram:
+
+```java
+public class Book {
+    private long id;
+    private String name;
+    private String language;
+    private int yearOfPublishing;
+    private List<Author> authors;
+    private Genre genre;
+
+    // getters and setters
+}
+
+public class Author {
+    private long id;
+    private String firstName;
+    private String lastName;
+    private String nationality;
+    private List<Book> books;
+    private Genre genre;
+
+    // getters and setters
+}
+
+public enum Genre {
+    SCIENCE_FICTION,
+    FANTASY,
+    HORROR,
+    TECHNICAL_WRITING,
+    EROTIC_FICTION,
+    WESTERN,
+    OTHER
+}
+```
+
+Note that the `Book` and `Author` classes have a `List` of other objects, and the `Genre` enum is used to represent the genre of a book or author. The `Book` class has a `List` of `Author` objects, and the `Author` class has a `List` of `Book` objects. The `Genre` enum is used to represent the genre of a book or author, and is defined as an `enum` type.
+================================================================
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create BookDTO, AuthorDTO classes that should be saved in database
+
+        ### Response:BookDTO class:
+
+```java
+import java.util.Date;
+
+public class BookDTO {
+    private int id;
+    private String title;
+    private String isbn;
+    private int pages;
+    private String publisher;
+    private Date publicationDate;
+    private AuthorDTO author;
+
+    public BookDTO() {
+    }
+
+    public BookDTO(int id, String title, String isbn, int pages, String publisher, Date publicationDate, AuthorDTO author) {
+        this.id = id;
+        this.title = title;
+        this.isbn = isbn;
+        this.pages = pages;
+        this.publisher = publisher;
+        this.publicationDate = publicationDate;
+        this.author = author;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public Date getPublicationDate() {
+        return publicationDate;
+    }
+
+    public void setPublicationDate(Date publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
+    public AuthorDTO getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(AuthorDTO author) {
+        this.author = author;
+    }
+}
+```
+
+AuthorDTO class:
+
+```java
+public class AuthorDTO {
+    private int id;
+    private String name;
+    private String email;
+
+    public AuthorDTO() {
+    }
+
+    public AuthorDTO(int id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}
+```
+
+These classes are used to store book and author information in the database. The BookDTO class has a reference to the AuthorDTO class, which is used to store the author information.
+================================================================
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create BookConverter and AuthorConverter that have methods toDTO() and fromDTO() which have sorce and destination as parameteres
+
+        ### Response:Here's an example implementation of BookConverter and AuthorConverter:
+
+```java
+public class BookConverter {
+
+    public static BookDTO toDTO(Book book) {
+        if (book == null) {
+            return null;
+        }
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setId(book.getId());
+        bookDTO.setTitle(book.getTitle());
+        bookDTO.setAuthor(AuthorConverter.toDTO(book.getAuthor()));
+        return bookDTO;
+    }
+
+    public static Book fromDTO(BookDTO bookDTO) {
+        if (bookDTO == null) {
+            return null;
+        }
+        Book book = new Book();
+        book.setId(bookDTO.getId());
+        book.setTitle(bookDTO.getTitle());
+        book.setAuthor(AuthorConverter.fromDTO(bookDTO.getAuthor()));
+        return book;
+    }
+}
+
+public class AuthorConverter {
+
+    public static AuthorDTO toDTO(Author author) {
+        if (author == null) {
+            return null;
+        }
+        AuthorDTO authorDTO = new AuthorDTO();
+        authorDTO.setId(author.getId());
+        authorDTO.setName(author.getName());
+        return authorDTO;
+    }
+
+    public static Author fromDTO(AuthorDTO authorDTO) {
+        if (authorDTO == null) {
+            return null;
+        }
+        Author author = new Author();
+        author.setId(authorDTO.getId());
+        author.setName(authorDTO.getName());
+        return author;
+    }
+}
+```
+
+In this implementation, the `toDTO()` method of BookConverter converts a Book object to a BookDTO object, and the `fromDTO()` method of BookConverter converts a BookDTO object to a Book object. Similarly, the `toDTO()` method of AuthorConverter converts an Author object to an AuthorDTO object, and the `fromDTO()` method of AuthorConverter converts an AuthorDTO object to an Author object.
+
+Both BookConverter and AuthorConverter use the corresponding DTO objects to convert between the source and destination objects. This allows for easy conversion between different object types without having to write separate conversion logic for each object type.
+================================================================
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create yaml file with connection to PostgreSQL
+
+        ### Response:To create a yaml file with connection to PostgreSQL, follow these steps:
+
+1. Open a text editor and create a new file.
+2. Add the following code to the file:
+
+```yaml
+# PostgreSQL connection details
+db:
+  driver: 'postgres'
+  host: 'localhost'
+  port: 5432
+  database: 'your_database_name'
+  username: 'your_username'
+  password: 'your_password'
+```
+
+3. Replace `your_database_name`, `your_username`, and `your_password` with your own database name, username, and password.
+4. Save the file with a `.yaml` extension.
+
+Now you can use this file to connect to your PostgreSQL database in your Python code.
+================================================================
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create BookService with methods get(Long id) and register(Book book), AuthorService with methods get(Long id) and register(Author author)
+
+        ### Response:Here's an implementation of the BookService and AuthorService interfaces with the required methods:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class BookService {
+    private List<Book> books = new ArrayList<>();
+
+    public Book get(Long id) {
+        for (Book book : books) {
+            if (book.getId().equals(id)) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    public void register(Book book) {
+        books.add(book);
+    }
+}
+
+public class AuthorService {
+    private List<Author> authors = new ArrayList<>();
+
+    public Author get(Long id) {
+        for (Author author : authors) {
+            if (author.getId().equals(id)) {
+                return author;
+            }
+        }
+        return null;
+    }
+
+    public void register(Author author) {
+        authors.add(author);
+    }
+}
+```
+
+In this implementation, the BookService and AuthorService classes both have a private list of their respective objects. The `get` method allows you to retrieve an object by its ID, and the `register` method allows you to add a new object to the list.
+
+Note that in this implementation, the `get` method returns `null` if the object is not found in the list. This is a common pattern in many data access objects (DAOs) and is used to avoid throwing exceptions. If you prefer to throw an exception instead, you can modify the `get` method to throw a `NotFoundException` or a similar exception.
+================================================================
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create BookRepository and AuthorRepository. All services must use repository in methods.
+
+        ### Response:Sure, I can help you with that. Here's an example of how you can create the BookRepository and AuthorRepository classes:
+
+```python
+from typing import List
+
+class BookRepository:
+    def __init__(self):
+        self.books = []
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def get_all_books(self) -> List:
+        return self.books
+
+class AuthorRepository:
+    def __init__(self):
+        self.authors = []
+
+    def add_author(self, author):
+        self.authors.append(author)
+
+    def get_all_authors(self) -> List:
+        return self.authors
+```
+
+In this example, we have created two classes, `BookRepository` and `AuthorRepository`, which are responsible for storing and retrieving data related to books and authors. We have used a simple list to store the data, but you can use a database or any other storage mechanism depending on your requirements.
+
+Now, let's say we have a `BookService` class that needs to retrieve all books from the repository. We can modify the `BookService` class to use the `BookRepository` class as follows:
+
+```python
+class BookService:
+    def __init__(self, book_repository: BookRepository):
+        self.book_repository = book_repository
+
+    def get_all_books(self) -> List:
+        return self.book_repository.get_all_books()
+```
+
+In this example, we have created a `BookService` class that takes a `BookRepository` instance as a constructor argument. We have then modified the `get_all_books` method to use the `get_all_books` method of the `BookRepository` instance to retrieve all books from the repository.
+
+Similarly, we can modify the `AuthorService` class to use the `AuthorRepository` class as follows:
+
+```python
+class AuthorService:
+    def __init__(self, author_repository: AuthorRepository):
+        self.author_repository = author_repository
+
+    def get_all_authors(self) -> List:
+        return self.author_repository.get_all_authors()
+```
+
+In this example, we have created an `AuthorService` class that takes an `AuthorRepository` instance as a constructor argument. We have then modified the `get_all_authors` method to use the `get_all_authors` method of the `AuthorRepository` instance to retrieve all authors from the repository.
+
+By using repositories in methods, we can easily swap out the storage mechanism without affecting the rest of the application.
+================================================================
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create BookController class with two methods:
+        registerBook(Book book) with '/register' endpoint and getBookByid(Long bookId) with '/get' endpoint, use BookService in these methods for saving book and getting book.
+
+        ### Response:Here's the implementation of the BookController class with the two methods:
+
+```java
+@RestController
+@RequestMapping("/book")
+public class BookController {
+
+    @Autowired
+    private BookService bookService;
+
+    @PostMapping("/register")
+    public ResponseEntity<Book> registerBook(@RequestBody Book book) {
+        Book savedBook = bookService.saveBook(book);
+        return ResponseEntity.ok(savedBook);
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<Book> getBookById(@RequestParam("id") Long bookId) {
+        Book book = bookService.getBookById(bookId);
+        if (book == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(book);
+    }
+}
+```
+
+In the `registerBook` method, we use the `@PostMapping` annotation to map the `/register` endpoint to this method. We also use the `@RequestBody` annotation to bind the request body to the `book` parameter. We then call the `saveBook` method of the `BookService` to save the book and return the saved book as the response.
+
+In the `getBookById` method, we use the `@GetMapping` annotation to map the `/get` endpoint to this method. We also use the `@RequestParam` annotation to bind the `bookId` parameter from the query string to the `bookId` parameter. We then call the `getBookById` method of the `BookService` to get the book by its ID and return the book as the response. If the book is not found, we return a 404 Not Found response.
+================================================================
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create AuthorController class with two methods:
+        registerAuthor(Author author) with '/register' endpoint and getAuthorById(Long bookId) with '/get' endpoint, use AuthorService in these methods for saving author and getting author.
+
+        ### Response:Here's the implementation of the AuthorController class with the two methods:
+
+```java
+@RestController
+@RequestMapping("/authors")
+public class AuthorController {
+
+    @Autowired
+    private AuthorService authorService;
+
+    @PostMapping("/register")
+    public ResponseEntity<Author> registerAuthor(@RequestBody Author author) {
+        Author savedAuthor = authorService.saveAuthor(author);
+        return ResponseEntity.ok(savedAuthor);
+    }
+
+    @GetMapping("/get/{authorId}")
+    public ResponseEntity<Author> getAuthorById(@PathVariable Long authorId) {
+        Author author = authorService.getAuthorById(authorId);
+        if (author == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(author);
+    }
+}
+```
+
+In the `registerAuthor` method, we use the `@PostMapping` annotation to map the `/register` endpoint to this method. The `@RequestBody` annotation is used to bind the request body to the `Author` object. We then call the `saveAuthor` method of the `AuthorService` to save the author and return the saved author in a `ResponseEntity` object.
+
+In the `getAuthorById` method, we use the `@GetMapping` annotation to map the `/get/{authorId}` endpoint to this method. The `@PathVariable` annotation is used to bind the `authorId` parameter to the `authorId` variable. We then call the `getAuthorById` method of the `AuthorService` to get the author by its ID and return the author in a `ResponseEntity` object. If the author is not found, we return a `ResponseEntity` with a 404 status code.
+================================================================
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create IntegrationTest with annotation @CucumberContextConfiguration.
+
+        ### Response:Sure, I can help you with that. Here's an example of how to create an IntegrationTest with the `@CucumberContextConfiguration` annotation:
+
+```java
+import io.cucumber.java.Before;
+import io.cucumber.spring.CucumberContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+
+@SpringBootTest
+@CucumberContextConfiguration
+@ContextConfiguration(classes = MyAppConfig.class)
+public class IntegrationTest {
+
+    @Before
+    public void before() {
+        // Code to be executed before each scenario
+    }
+
+}
+```
+
+In this example, we're using the `@CucumberContextConfiguration` annotation to indicate that this is an IntegrationTest that should be run with Cucumber. We're also using the `@SpringBootTest` annotation to indicate that we want to start the Spring Boot application context before running the tests. Finally, we're using the `@ContextConfiguration` annotation to specify the application context class that we want to use.
+
+Note that the `@ContextConfiguration` annotation can be used in combination with the `@SpringBootTest` annotation, but it's generally recommended to use the `@SpringBootTest` annotation alone.
+================================================================
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create registerBook.feature file with these lines:
+        Scenario: Register book 
+            Given Book exist:
+            | id | name                     | language    | yearOfPublishing | genres           | author     |
+            | *1 | Adventures of Tom Sawyer | UA          | 1876             | NOVEL, ADVENTURE | Mark Twain |
+            When user register book
+            | id | name                           | language | yearOfPublishing | genres           | author     |
+            | *2 | Adventures of Huckleberry Finn | UA       | 1885             | NOVEL, ADVENTURE | Mark Twain |
+            Then book should be registered
+            | id | name                           | language    | yearOfPublishing | genres           | author     |
+            | *1 | Adventures of Tom Sawyer       | UA          | 1876             | NOVEL, ADVENTURE | Mark Twain |
+            | *2 | Adventures of Huckleberry Finn | UA          | 1885             | NOVEL, ADVENTURE | Mark Twain | 
+        
+
+        ### Response:Feature: Register Book
+
+    Scenario: Register book
+        Given Book exist:
+            | id | name                     | language    | yearOfPublishing | genres           | author     |
+            | *1 | Adventures of Tom Sawyer | UA          | 1876             | NOVEL, ADVENTURE | Mark Twain |
+        When user register book
+            | id | name                           | language | yearOfPublishing | genres           | author     |
+            | *2 | Adventures of Huckleberry Finn | UA       | 1885             | NOVEL, ADVENTURE | Mark Twain |
+        Then book should be registered
+            | id | name                           | language    | yearOfPublishing | genres           | author     |
+            | *1 | Adventures of Tom Sawyer       | UA          | 1876             | NOVEL, ADVENTURE | Mark Twain |
+            | *2 | Adventures of Huckleberry Finn | UA          | 1885             | NOVEL, ADVENTURE | Mark Twain |
+================================================================
+
+        Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+        ### Instruction: Create tests for registerBook.feature in three classes: GivenTest, WhenTest and ThenTest.
+
+        ### Response:GivenTest:
+
+```java
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class GivenTest {
+
+    @Test
+    public void given_a_valid_book_title_when_register_book_then_book_is_registered() {
+        // Set up the web driver
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the register book page
+        driver.get("http://localhost:8080/registerBook");
+
+        // Find the book title input field
+        WebElement bookTitleInput = driver.findElement(By.id("bookTitle"));
+
+        // Set the book title
+        bookTitleInput.sendKeys("The Great Gatsby");
+
+        // Find the author input field
+        WebElement authorInput = driver.findElement(By.id("author"));
+
+        // Set the author
+        authorInput.sendKeys("F. Scott Fitzgerald");
+
+        // Find the submit button
+        WebElement submitButton = driver.findElement(By.id("submitButton"));
+
+        // Click the submit button
+        submitButton.click();
+
+        // Assert that the book has been registered
+        WebElement successMessage = driver.findElement(By.id("successMessage"));
+        assert successMessage.isDisplayed();
+
+        // Close the web driver
+        driver.quit();
+    }
+
+    @Test
+    public void given_an_invalid_book_title_when_register_book_then_error_message_is_displayed() {
+        // Set up the web driver
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the register book page
+        driver.get("http://localhost:8080/registerBook");
+
+        // Find the book title input field
+        WebElement bookTitleInput = driver.findElement(By.id("bookTitle"));
+
+        // Set the book title
+        bookTitleInput.sendKeys("Invalid Book Title");
+
+        // Find the author input field
+        WebElement authorInput = driver.findElement(By.id("author"));
+
+        // Set the author
+        authorInput.sendKeys("F. Scott Fitzgerald");
+
+        // Find the submit button
+        WebElement submitButton = driver.findElement(By.id("submitButton"));
+
+        // Click the submit button
+        submitButton.click();
+
+        // Assert that an error message is displayed
+        WebElement errorMessage = driver.findElement(By.id("errorMessage"));
+        assert errorMessage.isDisplayed();
+
+        // Close the web driver
+        driver.quit();
+    }
+
+    @Test
+    public void given_an_empty_book_title_when_register_book_then_error_message_is_displayed() {
+        // Set up the web driver
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the register book page
+        driver.get("http://localhost:8080/registerBook");
+
+        // Find the book title input field
+        WebElement bookTitleInput = driver.findElement(By.id("bookTitle"));
+
+        // Set the book title
+        bookTitleInput.sendKeys("");
+
+        // Find the author input field
+        WebElement authorInput = driver.findElement(By.id("author"));
+
+        // Set the author
+        authorInput.sendKeys("F. Scott Fitzgerald");
+
+        // Find the submit button
+        WebElement submitButton = driver.findElement(By.id("submitButton"));
+
+        // Click the submit button
+        submitButton.click();
+
+        // Assert that an error message is displayed
+        WebElement errorMessage = driver.findElement(By.id("errorMessage"));
+        assert errorMessage.isDisplayed();
+
+        // Close the web driver
+        driver.quit();
+    }
+}
+```
+
+WhenTest:
+
+```java
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class WhenTest {
+
+    @Test
+    public void when_register_book_then_book_is_registered() {
+        // Set up the web driver
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the register book page
+        driver.get("http://localhost:8080/registerBook");
+
+        // Find the book title input field
+        WebElement bookTitleInput = driver.findElement(By.id("bookTitle"));
+
+        // Set the book title
+        bookTitleInput.sendKeys("The Great Gatsby");
+
+        // Find the author input field
+        WebElement authorInput = driver.findElement(By.id("author"));
+
+        // Set the author
+        authorInput.sendKeys("F. Scott Fitzgerald");
+
+        // Find the submit button
+        WebElement submitButton = driver.findElement(By.id("submitButton"));
+
+        // Click the submit button
+        submitButton.click();
+
+        // Assert that the book has been registered
+        WebElement successMessage = driver.findElement(By.id("successMessage"));
+        assert successMessage.isDisplayed();
+
+        // Close the web driver
+        driver.quit();
+    }
+
+    @Test
+    public void when_register_book_with_invalid_book_title_then_error_message_is_displayed() {
+        // Set up the web driver
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the register book page
+        driver.get("http://localhost:8080/registerBook");
+
+        // Find the book title input field
+        WebElement bookTitleInput = driver.findElement(By.id("bookTitle"));
+
+        // Set the book title
+        bookTitleInput.sendKeys("Invalid Book Title");
+
+        // Find the author input field
+        WebElement authorInput = driver.findElement(By.id("author"));
+
+        // Set the author
+        authorInput.sendKeys("F. Scott Fitzgerald");
+
+        // Find the submit button
+        WebElement submitButton = driver.findElement(By.id("submitButton"));
+
+        // Click the submit button
+        submitButton.click();
+
+        // Assert that an error message is displayed
+        WebElement errorMessage = driver.findElement(By.id("errorMessage"));
+        assert errorMessage.isDisplayed();
+
+        // Close the web driver
+        driver.quit();
+    }
+
+    @Test
+    public void when_register_book_with_empty_book_title_then_error_message_is_displayed() {
+        // Set up the web driver
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the register book page
+        driver.get("http://localhost:8080/registerBook");
+
+        // Find the book title input field
+        WebElement bookTitleInput = driver.findElement(By.id("bookTitle"));
+
+        // Set the book title
+        bookTitleInput.sendKeys("");
+
+        // Find the author input field
+        WebElement authorInput = driver.findElement(By.id("author"));
+
+        // Set the author
+        authorInput.sendKeys("F. Scott Fitzgerald");
+
+        // Find the submit button
+        WebElement submitButton = driver.findElement(By.id("submitButton"));
+
+        // Click the submit button
+        submitButton.click();
+
+        // Assert that an error message is displayed
+        WebElement errorMessage = driver.findElement(By.id("errorMessage"));
+        assert errorMessage.isDisplayed();
+
+        // Close the web driver
+        driver.quit();
+    }
+}
+```
+
+ThenTest:
+
+```java
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class ThenTest {
+
+    @Test
+    public void then_book_is_registered() {
+        // Set up the web driver
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the register book page
+        driver.get("http://localhost:8080/registerBook");
+
+        // Find the book title input field
+        WebElement bookTitleInput = driver.findElement(By.id("bookTitle"));
+
+        // Set the book title
+        bookTitleInput.sendKeys("The Great Gatsby");
+
+        // Find the author input field
+        WebElement authorInput = driver.findElement(By.id("author"));
+
+        // Set the author
+        authorInput.sendKeys("F. Scott Fitzgerald");
+
+        // Find the submit button
+        WebElement submitButton = driver.findElement(By.id("submitButton"));
+
+        // Click the submit button
+        submitButton.click();
+
+        // Assert that the book has been registered
+        WebElement successMessage = driver.findElement(By.id("successMessage"));
+        assert successMessage.isDisplayed();
+
+        // Close the web driver
+        driver.quit();
+    }
+
+    @Test
+    public void then_error_message_is_displayed() {
+        // Set up the web driver
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the register book page
+        driver.get("http://localhost:8080/registerBook");
+
+        // Find the book title input field
+        WebElement bookTitleInput = driver.findElement(By.id("bookTitle"));
+
+        // Set the book title
+        bookTitleInput.sendKeys("Invalid Book Title");
+
+        // Find the author input field
+        WebElement authorInput = driver.findElement(By.id("author"));
+
+        // Set the author
+        authorInput.sendKeys("F. Scott Fitzgerald");
+
+        // Find the submit button
+        WebElement submitButton = driver.findElement(By.id("submitButton"));
+
+        // Click the submit button
+        submitButton.click();
+
+        // Assert that an error message is displayed
+        WebElement errorMessage = driver.findElement(By.id("errorMessage"));
+        assert errorMessage.isDisplayed();
+
+        // Close the web driver
+        driver.quit();
+    }
+}
+```
+================================================================
