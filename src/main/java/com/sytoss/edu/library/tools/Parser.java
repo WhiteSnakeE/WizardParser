@@ -1,10 +1,24 @@
 package com.sytoss.edu.library.tools;
 
+import com.sytoss.edu.library.tools.creator.ParserFileCreator;
+import com.sytoss.edu.library.tools.reader.ParserFileReader;
+import com.sytoss.edu.library.tools.writer.ParserFileWriter;
+
 import java.io.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Parser {
+
+    private final ParserFileWriter parserFileWriter;
+
+    private final ParserFileCreator parserFileCreator;
+
+    private final ParserFileReader parserFileReader;
+
+    public Parser(ParserFileWriter parserFileWriter, ParserFileCreator parserFileCreator, ParserFileReader parserFileReader) {
+        this.parserFileWriter = parserFileWriter;
+        this.parserFileCreator = parserFileCreator;
+        this.parserFileReader = parserFileReader;
+    }
 
     public void parse(String from, String to) {
         String line;
@@ -20,27 +34,25 @@ public class Parser {
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.matches("^```[a-zA-Z].*$")) {
                     fileExtension = line.substring(3);
-                    if (!fileExtension.equals("java")){
+                    if (!fileExtension.equals("java")) {
                         className = "pom";
                     }
-
                     continue;
                 }
                 if (fileExtension != null) {
                     if (line.matches("```")) {
-                        file = create(fileExtension, className);
-                        writeToFile(fileValue.toString(), file);
+                        file = parserFileCreator.create(fileExtension, className, to);
+                        parserFileWriter.writeToFile(fileValue.toString(), file);
                         fileValue.delete(0, fileValue.length());
                         fileExtension = null;
                         className = null;
                     } else {
                         fileValue.append(line);
-                        if(className==null) {
-                            className = findClassName(line);
+                        if (className == null) {
+                            className = parserFileReader.findClassName(line);
                         }
                         fileValue.append("\n");
                     }
-
                 }
             }
         } catch (IOException e) {
@@ -49,41 +61,14 @@ public class Parser {
 
     }
 
-    private String findClassName(String line) {
-        String className = null;
-        String regex = "^public\\s+(?:class|interface)\\s+(\\w+).*$";
-        if(line.matches(regex)){
-            System.out.println(line);
-            className = line.replaceFirst("^public\\s+(\\w+\\s+)*(?:class|interface)\\s","");
-            System.out.println(className);
-            className = className.split("\\s+")[0];
-        }
-        System.out.println(className);
-        return className;
-    }
 
-    private File create(String fileExtension, String fileName) {
-        File file = new File("C:\\Users\\vlad\\IdeaProjects\\WizardParser\\src\\main\\java\\com\\sytoss\\edu\\library" + "\\" + fileName + "." + fileExtension);
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return file;
-    }
-
-    private void writeToFile(String text, File file) {
-        FileWriter fileWriter = null;
-        BufferedWriter bufferedWriter = null;
-        try {
-            fileWriter = new FileWriter(file);
-            bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(text);
-            bufferedWriter.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    private String findFileExtension(String line,String fileExtension, String className){
+//        if (line.matches("^```[a-zA-Z].*$")) {
+//            fileExtension = line.substring(3);
+//            if (!fileExtension.equals("java")){
+//                className = "pom";
+//            }
+//        }
+//    }
 
 }
