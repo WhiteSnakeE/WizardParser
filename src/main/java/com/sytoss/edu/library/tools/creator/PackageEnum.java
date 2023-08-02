@@ -5,7 +5,8 @@ public enum PackageEnum {
     DTO("dto"),
     CONTROLLER("controller"),
     SERVICE("service"),
-    REPOSITORY("repository");
+    REPOSITORY("repository"),
+    CONFIGURATION("configuration");
 
     public final String packageName;
 

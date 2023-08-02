@@ -16,6 +16,8 @@ public class Parser {
 
     private final String startOfFile = "^```[a-zA-Z].*$" ;
 
+    private final String endOfFile  = "```";
+
     public Parser(ParserFileWriter parserFileWriter, ParserFileCreator parserFileCreator, ParserFileReader parserFileReader) {
         this.parserFileWriter = parserFileWriter;
         this.parserFileCreator = parserFileCreator;
@@ -39,7 +41,7 @@ public class Parser {
                     continue;
                 }
                 if (fileExtension != null) {
-                    if (line.matches("```")) {
+                    if (line.matches(endOfFile)) {
                         file = parserFileCreator.create(fileExtension, className, to);
                         parserFileWriter.writeToFile(fileValue.toString(), file);
                         fileValue.delete(0, fileValue.length());

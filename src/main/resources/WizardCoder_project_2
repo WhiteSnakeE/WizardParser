@@ -527,6 +527,8 @@ Note that the `@ContextConfiguration` annotation can be used in combination with
         Below is an instruction that describes a task. Write a response that appropriately completes the request
 
         ### Instruction: Create registerBook.feature file with these lines:
+
+
         Scenario: Register book 
             Given Book exist:
             | id | name                     | language    | yearOfPublishing | genres           | author     |
@@ -541,7 +543,7 @@ Note that the `@ContextConfiguration` annotation can be used in combination with
         
 
         ### Response:Feature: Register Book
-
+```feature
     Scenario: Register book
         Given Book exist:
             | id | name                     | language    | yearOfPublishing | genres           | author     |
@@ -553,6 +555,7 @@ Note that the `@ContextConfiguration` annotation can be used in combination with
             | id | name                           | language    | yearOfPublishing | genres           | author     |
             | *1 | Adventures of Tom Sawyer       | UA          | 1876             | NOVEL, ADVENTURE | Mark Twain |
             | *2 | Adventures of Huckleberry Finn | UA          | 1885             | NOVEL, ADVENTURE | Mark Twain |
+```
 ================================================================
 
         Below is an instruction that describes a task. Write a response that appropriately completes the request

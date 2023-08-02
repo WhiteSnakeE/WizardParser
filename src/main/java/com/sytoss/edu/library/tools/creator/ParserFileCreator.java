@@ -22,9 +22,9 @@ public class ParserFileCreator {
         } else if (fileExtension.equals("java")) {
             to = findPackageToThisClass(to, fileName);
         } else {
-            fileName = "file-name" + a;
+            fileName += a;
             a++;
-            to = createFileInResources(to);
+            to = createFileInResources(to, fileExtension);
         }
         file = new File(to + "\\" + fileName + "." + fileExtension);
         try {
@@ -71,11 +71,22 @@ public class ParserFileCreator {
         return to;
     }
 
-    private String createFileInResources(String to) {
-        String regex = "(.*java).*";
-        to = to.replaceAll(regex,"$1").replaceAll("java","resources");
-        System.out.println(to);
-        return to;
+    private String createFileInResources(String to, String fileExtension) {
+        String regex;
+        if (fileExtension.equals(FileExtensionEnum.FEATURE.extension)) {
+            to = to.replace("main", "test");
+            to = to.replaceFirst("java\\b.*", "");
+            to += "\\" + "resources" + "\\" + "features";
+
+            File file = new File(to);
+            file.mkdirs();
+            return to;
+        } else {
+            regex = "(.*java).*";
+            to = to.replaceAll(regex, "$1").replaceAll("java", "resources");
+            System.out.println(to);
+            return to;
+        }
     }
 
 
