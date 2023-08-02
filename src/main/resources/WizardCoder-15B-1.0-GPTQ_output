@@ -1,0 +1,1539 @@
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create Java classes according to this PlantUML diagram:
+
+@startuml
+
+entity Book {
+id: long
+name: string
+language: string
+yearOfPublishing: int
+}
+
+entity Author {
+id: long
+firstName: string
+lastName: string
+nationality: string
+}
+
+enum Genre {
+SCIENCE_FICTION
+FANTASY
+HORROR
+TECHNICAL_WRITING
+EROTIC_FICTION
+WESTERN
+OTHER
+}
+
+Book "1..N" -o "1" Author: book
+Book "1" o- "1..N" Genre: genre
+Author "1" o- "1..N" Genre: genre
+Author "1..1" -o "1" Book: author
+
+@enduml
+
+    ### Response:Here are the corresponding Java classes for the given PlantUML class diagrams:
+
+```java
+public enum Genre {
+    SCIENCE_FICTION, FANTASY, HORROR, TECHNICAL_WRITING, EROTIC_FICTION, WESTERN, OTHER;
+
+    public static final String[] GENRE = {"Science fiction", "Fantasy", "Horror",
+            "Technical writing", "Erotic fiction", "Western", "Other"};
+    
+    @Override
+    public String toString() {
+        return GENRE[this.ordinal()];
+    }
+    
+}
+
+
+class Book {
+    private Long id;
+    private String name;
+    private String language;
+    private Integer yearOfPublishing;
+    private List<Genre> genres; // One-to-many relationship with Genre entity
+    private Author author; // ManyToOne relationship with Author entity
+
+    public void addGenre(Genre genre) {
+        if (genres == null) {
+            genres = new ArrayList<>();
+        }
+
+        genres.add(genre);
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    // getters and setters...
+}
+
+
+class Author {
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private String nationality;
+    private Set<Genre> genres; // Many-to-one relationship with Genre entity
+    private Book books; // One-to-many relationship with Book entity
+
+    public void addGenre(Genre genre) {
+        if (genres == null) {
+            genres = new HashSet<>();
+        }
+        
+        genres.add(genre);
+    }
+
+    public void writeBook(Book book) {
+        if (books == null) {
+            books = new LinkedList<>();
+        }
+
+        books.add(book);
+    }
+
+    // getters and setters...
+}
+```
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create 3 java classes: class Person with fields: 'name', 'surname' and 'email'; class PersonService with method registerPerson(); class PersonControler with method registerPerson() with endpoint '/register' and field personService
+
+    ### Response:Here's how you can implement these three Java classes in your project to handle registration of new users:
+
+**1- Create `Person` Class:**
+```java
+public class Person {
+    private String name;
+    private String surname;
+    private String email;
+
+    public Person(String name, String surname, String email) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+    }
+    
+    // getters and setters for each field are optional but recommended 
+}
+```
+
+This class represents a user object containing their personal information such as name, surname, and email address. It has getter methods for all its properties so they can be accessed from other parts of our application if needed. 
+
+Note that we're using private access modifier on some variables since we don't want them directly accessible outside of the class itself. We also have a constructor which takes values for all the required fields when creating a new instance of the class. This helps us avoid errors or unexpected behavior by ensuring that every time we create a new `Person` object it contains valid data.
+
+
+**2- Create `PersonService` Interface:**
+```java
+import javax.ws.rs.*;
+
+@Path("/person")
+public interface PersonService {
+    @POST
+    @Consumes("application/json")
+    void registerPerson(@Valid Person person);
+}
+```
+
+This interface defines one single RESTful API endpoint called `/register`. The `@Path` annotation specifies where this resource will live within our web app (in this case at "/person"). The `@POST` annotation indicates that this method should only accept HTTP POST requests. Finally, the `@Consumes` annotation tells JAX-RS what format the input payloads should take (`"application/json"`).
+
+The actual implementation of this service may vary depending on the requirements of our specific use case, but here's an example implementation that simply logs the details of any incoming `Person` objects before storing them somewhere persistent like a database:
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+//...
+
+private static final Logger LOGGER = LoggerFactory.getLogger(PersonService.class);
+
+@Override
+public void registerPerson(Person person) throws Exception {
+    LOGGER.info("Registering new person: " + person);
+    // store person object in database etc...
+}
+```
+
+In this simple version, we just log the contents of the received `Person` object to demonstrate how logging could work in practice. Note that there might be more complex logic involved than simply saving the object to disk - for example, sending confirmation emails after successful registration, generating unique IDs for each registered user, validating inputs, handling error cases, etc.. 
+
+
+**3- Implement `PersonController`**
+```java
+import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+
+@Path("/")
+public class PersonController {
+    @Inject
+    private PersonService personService;
+
+    @POST
+    @Path("/register")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_PLAIN})
+    public String registerNewUser(@Valid Person person) throws Exception {
+        try {
+            personService.registerPerson(person);
+            return "Registration completed successfully";
+        } catch (Exception e) {
+            throw new WebApplicationException("Error registering user", e);
+        }
+    }
+}
+```
+
+Finally, let's look at the controller responsible for receiving client requests and dispatching them to the appropriate services based on the requested URL path. In this particular case, we've defined two endpoints:
+
+1. A root level `/register` endpoint that accepts JSON formatted `Person` objects via HTTP POST requests and returns plain text responses indicating whether the registration was successful or not.
+2. An additional nested `/register` endpoint underneath the main `/person` endpoint that does exactly the same thing, except it uses different annotations to indicate that it belongs to another subresource hierarchy.
+
+Both endpoints delegate responsibility for processing the incoming `Person` object to the injected `PersonService`, passing along any exceptions thrown during execution back up through the stack until they reach the top-level exception handler in our servlet container.
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create 3 java classes: 
+1) class Person with fields: 'name', 'surname' and 'email'. Use Lombok annotations for getters and setters; 
+2) class PersonService with method registerPerson(); 
+3) class PersonControler with method registerPerson() with endpoint '/register' and field presonService
+
+    ### Response:Here's how you can implement these three Java classes in your project:
+
+1. Create `Person` class using Lombok annotations to generate getter/setter methods automatically
+
+```java
+import lombok.*;
+
+@Getter @Setter // use this annotation on top of class definition 
+public class Person {
+    private String name;
+    private String surname;
+    private String email;
+
+    public void setName(String name){
+        if (name!= null &&!name.isEmpty()){
+            this.name = name;
+        } else{
+            throw new IllegalArgumentException("Name cannot be empty or null");
+        }
+    }
+    
+    public void setSurname(String surname){
+        if (surname!= null &&!surname.isEmpty()) {
+            this.surname = surname;
+        }else{
+            throw new IllegalArgumentException("Surname cannot be empty or null");
+        }
+    }
+    
+    public void setEmail(String email){
+        if (email == null || email.isEmpty()){
+            return; 
+        }
+        
+        boolean isValidEmailFormat = true;
+
+        try {
+            javax.mail.internet.InternetAddress emailAddr =
+                    new javax.mail.internet.InternetAddress(email);
+
+            if (!emailAddr.isValid()){
+                isValidEmailFormat = false;
+            }
+        } catch (Exception e) {}
+
+        if(!isValidEmailFormat){
+            System.out.println("Invalid Email format.");
+            return;
+        }
+
+        this.email = email;
+    }
+    
+}
+```
+2. Implement `PersonService` interface which has one method called `registerPerson()` 
+
+```java
+public interface PersonService {
+    public Boolean registerPerson(Person person);
+}
+```
+
+3. Inside `PersonController`, inject instance of `PersonService` into constructor, then define `@PostMapping("/register")` annotated method as follows:
+
+```java
+@RestController
+public class PersonController {
+
+    @Autowired 
+    private PersonService service;
+
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@RequestBody Person person){
+        service.registerPerson(person);
+        return ResponseEntity.ok().build();
+    }
+}
+```
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create 3 java classes: 
+1) class Person with fields: 'name', 'surname' and 'email'. Use Getter and Setter annotations for this class; 
+2) class PersonService with method registerPerson(); 
+3) class PersonControler with method registerPerson() with endpoint '/register' and field presonService
+
+    ### Response:Here's how you can implement these three Java classes in your project:
+
+1. Create `Person` class with name, surname, email as its properties using getter/setter methods annotated to access them from outside of the class.
+
+```java
+import lombok.*;
+
+@Getter @Setter // Lombok library used here to generate getters & setters automatically 
+public class Person {
+    private String name;
+    private String surname;
+    private String email;
+
+    public void setName(String name){
+        if (name!= null &&!name.isEmpty()){
+            this.name = name;
+        } else{
+            throw new IllegalArgumentException("Name cannot be empty or null");
+        }
+    }
+    
+    public void setSurname(String surname){
+        if (surname!= null &&!surname.isEmpty()) {
+            this.surname = surname;
+        }else{
+            throw new IllegalArgumentException("Surname cannot be empty or null");
+        }
+    }
+    
+    public void setEmail(String email){
+        if (email == null || email.isEmpty()){
+            return; 
+        }
+        
+        boolean isValidEmailFormat = true;
+
+        try {
+            javax.mail.internet.InternetAddress emailAddr =
+                    new javax.mail.internet.InternetAddress(email);
+
+            if (!emailAddr.isValid()){
+                isValidEmailFormat = false;
+            }
+        } catch (Exception e) {}
+
+        if(!isValidEmailFormat){
+            System.out.println("Invalid Email format.");
+            return;
+        }
+
+        this.email = email;
+    }
+    
+}
+```
+
+2. Implement `PersonService` interface which has one abstract method called `registerPerson()`. This method takes instance of person object and registers it into database. 
+
+```java
+public interface PersonService {
+    void registerPerson(Person person);
+}
+```
+
+3. In order to use `PersonController`, we need to inject our implementation of `PersonService`. We also want to map `/register` URL path to `registerPerson()` method inside controller so let's annotate `@RestController` annotation on top of `PersonController` class. Finally, add mapping between HTTP POST requests at `/register` URL path to `registerPerson()` method by annotating it with `@PostMapping("/register")` annotation. Here's what the final code looks like:
+
+
+```java
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class PersonController {
+
+    @Autowired 
+    private PersonService service;
+
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@RequestBody Person person){
+        service.registerPerson(person);
+        return ResponseEntity.ok().build();
+    }
+}
+```
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create Java method which returns true if email is valid. else returns false. use regex
+
+    ### Response:Here's one way to implement this in Java using regular expressions (regex):
+
+```java
+import java.util.regex.*; // import package for regex support
+
+public class EmailValidator {
+    public static boolean isValidEmail(String email) {
+        String pattern = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(email);
+        
+        return matcher.matches();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Valid email address example:");
+        System.out.println(isValidEmail("<EMAIL>"));  // should print "true"
+
+        System.out.println("\nInvalid email address examples:");
+        System.out.println(isValidEmail("@example.com"));   // should print "false"
+        System.out.println(isValidEmail("user@."));       // should print "false"
+        System.out.println(isValidEmail(".com"));         // should print "false"
+    }
+}
+```
+
+Explanation of code:
+
+1. We define our `isValidEmail` function with a single parameter called `email`.
+2. Inside the function we declare and compile our regex pattern as a string variable named `pattern`, which matches most common email addresses format. The `@` symbol must be surrounded by word characters or hyphens (`\w`), followed by at least two more groups separated by dots (`\.`). Finally there can also be letters after the domain name up to four characters long (`{2,4}`). This ensures that only properly formatted emails are accepted. 
+3. Next, we initialize a new instance of the `Pattern` object passing it our precompiled regex pattern. Then we call its `matcher()` method on the input email string and store the result in another `Matcher` object.
+4. To check whether the email is valid or not, we simply call the `matches()` method on the `Matcher` object and return its value. If it returns `true`, then the email is considered valid according to our defined rules; otherwise, it's invalid.
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: find and fix errors in this Java code:
+
+public long saveChanges(BookAuditDTO bookAuditDTO) {
+    Long lastVersion = bookAuditRepository..getLastVersion(bookAuditDTO.getBookId());
+    lastVersion = (lastVersion = null) ? 1 : lastVersion + 1;
+    bookAuditDTO.setVersion(lastVersion);
+
+    BookAuditDTO insertedHouseDTO = bookAuditRepository.save(bookAuditDTO);
+    return insertedHouseDTO.getId();
+}
+
+    ### Response:The given java code has two syntax errors, which are as follows:
+
+1. The method signature should be `Long getLastVersion(String bookId)` instead of `long getLastVersion(String bookId)`.
+2. In line number 6, we need to use parentheses around `(lastVersion = null)? 1 : lastVersion + 1` so it becomes `((lastVersion = null)? 1 : lastVersion + 1)`, otherwise there will be compilation error due to operator precedence rules.
+
+Here's the corrected code with these fixes applied: 
+
+```java
+public Long saveChanges(BookAuditDTO bookAuditDTO) {
+    String bookId = bookAuditDTO.getBookId();
+
+    // Get latest version for current book id from database or set initial value if no record exists yet
+    Long lastVersion = bookAuditRepository.getLastVersion(bookId).orElseGet(() -> new Long("0"));
+    
+    // Increment by one since we want next incremental version after saving changes
+    lastVersion++;
+
+    // Set updated version on DTO object before inserting into DB
+    bookAuditDTO.setVersion(lastVersion);
+
+    // Insert/update audit data using repository layer
+    BookAuditDTO savedBookAuditDTO = bookAuditRepository.save(bookAuditDTO);
+
+    // Return ID of newly created / updated entity
+    return savedBookAuditDTO.getId();
+}
+```
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: add spaces before each field in this class: 
+
+@Getter
+@Setter
+public class Book {
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private long id;
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private String name;
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private String language;
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private int yearOfPublishing;
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private List<String> genres;
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private Author author;
+}
+
+    ### Response:Here's how you can modify your code to include space characters between fields and method annotations for better readability:
+
+```java
+import com.fasterxml.jackson.annotation.JsonView;
+import lombok.*;
+
+import java.util.List;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Book {
+    // Field declarations with spacing added
+
+    public static final JsonView FullBookInfo =... ;
+    
+    public static final JsonView FullBookInfoWithAuthorNameAndSurname =... ;
+    
+}
+```
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: add @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class) below every field in this class:
+
+@Getter
+@Setter
+public class Book {
+
+    private long id;
+
+    private String name;
+
+    private String language;
+
+    private int yearOfPublishing;
+
+    private List<String> genres;
+
+    private Author author;
+}
+
+    ### Response:Here's how you can modify your code to include `@JsonView` annotations for each of these fields:
+
+```java
+import com.fasterxml.jackson.annotation.JsonView;
+import lombok.*;
+
+import java.util.List;
+
+@Data
+public class Book {
+
+    //... other book properties here
+    
+    @JsonView({BookView.Summary.class, BookView.FullBookInfoWithoutAuthorDetails.class})
+    private Long id;
+
+    @JsonView({BookView.Summary.class, BookView.FullBookInfoWithoutAuthorDetails.class})
+    private String name;
+
+    @JsonView({BookView.Summary.class, BookView.FullBookInfoWithoutAuthorDetails.class})
+    private String language;
+
+    @JsonView({BookView.Summary.class, BookView.FullBookInfoWithoutAuthorDetails.class})
+    private Integer yearOfPublishing;
+
+    @JsonView({BookView.Summary.class, BookView.FullBookInfoWithoutAuthorDetails.class})
+    private List<String> genres;
+
+    @JsonView({BookView.Summary.class, BookView.FullBookInfoWithAuthorNameOnly.class})
+    private Author author;
+    
+}
+
+
+// View classes used with JsonViews annotation above 
+
+interface Summary {}
+
+interface FullBookInfoWithoutAuthorDetails extends Summary{}
+
+interface FullBookInfoWithAuthorNameOnly extends Summary{ } 
+```
+
+In this example, we have defined two view interfaces `Summary`, and three more specific ones which extend it - `FullBookInfoWithoutAuthorDetails`, `FullBookInfoWithAuthorNameOnly`. We then use them as parameters inside the `@JsonView` annotation on our various fields within the `Book` entity. This allows us to control what information gets serialized based on different views being requested by clients using JSON API requests or responses.
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: change every columns` name to lowercase
+
+databaseChangeLog:
+  - changeSet:
+      id: create_book_audit_genres_table
+      author: valentynl
+      changes:
+        - createTable:
+            tableName: BOOKS_AUDIT_GENRES
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: PK_BOOK_AUDIT_GENRES
+              - column:
+                  name: BOOK_AUDIT_ID
+                  type: BIGINT
+                  constraints:
+                    unique: false
+                    nullable: false
+                    foreignKeyName: FK_BOOK_AUDIT_GENRES
+                    references: BOOK_AUDIT(ID)
+                    deleteCascade: true
+              - column:
+                  name: GENRE_ID
+                  type: BIGINT
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: GENRE_NAME
+                  type: varchar(100)
+                  constraints:
+                    unique: false
+                    nullable: false
+
+    ### Response:Here's how you can achieve this using Liquibase in Java code:
+
+```java
+import liquibase.*;
+import liquibase.change.*;
+import liquibase.changelog.*;
+import liquibase.parser.*;
+import liquibase.resource.*;
+import java.io.*;
+
+public class LowercaseColumnNames {
+    public static void main(String[] args) throws Exception{
+        String changelogFile = "path/to/your/liquibase-changelog.xml";
+
+        // Load the Change Log XML file into memory and parse it with Liquibase Parser
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        InputStream inputStream = cl.getResourceAsStream("myfile");
+        
+        if (inputStream == null){
+            throw new FileNotFoundException("Could not find resource myfile");
+        }
+
+        ChangelogParser parser = new YamlChangelogParser();
+        DatabaseChangeLog changeLog = parser.parse(new InputStreamReader(inputStream), new ResourceAccessor() {});
+
+        for (ChangeSet changeSet : changeLog.getChangeSets()) {
+            for (Object object : changeSet.getChanges()) {
+                if (!(object instanceof CreateTableChange)) continue;
+
+                CreateTableChange tableChange = (CreateTableChange) object;
+                
+                List<ColumnConfig> oldColumns = tableChange.getColumns();
+                List<ColumnConfig> newColumns = new ArrayList<>();
+                
+                for (int i=0; i < oldColumns.size(); i++) {
+                    ColumnConfig col = oldColumns.get(i);
+                    
+                    // Convert all column names to lower case
+                    col.setName(col.getName().toLowerCase());
+
+                    newColumns.add(col);
+                }
+                
+                tableChange.setColumns(newColumns);
+            }
+        }
+
+        // Save updated Change Log back to disk as YAML format
+        FileWriter writer = new FileWriter(changelogFile);
+        try {
+            writer.write("# This file was generated by programmatically modifying\n" +
+                          "# existing tables' column names.\n" +
+                          "\n" +
+                          "databaseChangeLog:\n");
+
+            for (ChangeSet changeSet : changeLog.getChangeSets()) {
+                StringBuilder sb = new StringBuilder("\t- changeset:\n")
+                       .append("\t\tid: ").append(changeSet.getId()).append('\n')
+                       .append("\t\tauthor: ").append(changeSet.getAuthor()).append('\n');
+
+                boolean hasSqlTag = false;
+                for (Change change : changeSet.getChanges()) {
+                    if (!hasSqlTag && SqlStatement.class.isAssignableFrom(change.getClass())) {
+                        sb.append("\t\tsql:\n").append(change.generateStatements(DatabaseFactory.getInstance().findCorrectDatabaseImplementation(null)).trim()).append('\n');
+                        hasSqlTag = true;
+                    } else {
+                        sb.append("\t\tchanges:\n");
+
+                        if (CreateTableChange.class.isAssignableFrom(change.getClass())) {
+                            sb.append("\t\t\tcreateTable:\n")
+                                   .append("\t\t\t\ttablename: ")
+                                   .append(((CreateTableChange) change).getTableName().toUpperCase())
+                                   .append("\n")
+                                   .append("\t\t\tcolumns:\n");
+
+                            int j = 0;
+                            for (Map.Entry<String, Object> entry : ((CreateTableChange) change).getColumnTypes().entrySet()) {
+                                ColumnConfig config = new ColumnConfig((String)entry.getKey(), DataTypeFactory.getInstance().from(entry.getValue()), null, null, null, Boolean.FALSE, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create liquibase change set in yaml to create table Order. There are columns: id, customer_id, product_id, amount, date_of_order, city, post_office. Use uppercase for columns` names. All fields are not nullable. Add foreign keys for columns customer_id and product_id. Set author as vladyslavt
+
+    ### Response:```yaml
+databaseChangeLog:
+  - changeSet:
+      id: order-table-creation
+      author: vladyslavt
+      changes:
+        - createTable:
+            tableName: ORDER
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT(20)
+                  constraints:
+                    primaryKey: true
+                constraintName: pk_ORDER
+              - column:
+                  name: CUSTOMER_ID
+                  type: INT(11)
+                  constraints:
+                     nullable: false
+                     references:
+                        referenceTableName: Customer
+                        referencedColumnNames: ID
+                      checkConstraint: "customer_id > 0"
+                constraintName: fk_CUSTOMER_ID
+              - column:
+                  name: PRODUCT_ID
+                  type: INT(11)
+                  constraints:
+                     nullable: false
+                     references:
+                        referenceTableName: Product
+                        referencedColumnNames: ID
+                      checkConstraint: "product_id > 0"
+                constraintName: fk_PRODUCT_ID
+              - column:
+                  name: AMOUNT
+                  type: DECIMAL(19,4)
+                  constraints:
+                     nullable: false
+                
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create java class KafkaConfig to configure Kafka producer
+
+    ### Response:Here's how you can create Java class `KafkaConfig` for configuring Kafka Producer in your project:
+
+```java
+import org.apache.kafka.clients.producer.*;
+
+public class KafkaConfig {
+
+    private String bootstrapServers;
+    private String keySerializerClass = "org.apache.kafka.common.serialization.StringSerializer";
+    private String valueSerializerClass = "org.apache.kafka.common.serialization.StringSerializer";
+    
+    public void setBootstrapServers(String servers) {
+        this.bootstrapServers = servers;
+    }
+    
+    // Getters and Setters...
+    
+}
+```
+
+In above code, we have defined two variables - `keySerializerClass` and `valueSerializerClass`. These are default serializer classes used by KafkaProducer when serializing keys or values before sending them over network. You may need to change these depending on what kind of data you're trying to send through Kafka. 
+
+We also define one variable called `bootstrapServers`, which represents comma-separated list of host/port pairs that the client will use to establish initial connection to the Kafka cluster. This property must be specified while creating a new instance of KafkaProducer object using our configuration.
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create DTO class according to this class: 
+
+@Getter
+@Setter
+public class Book {
+
+    private long id;
+
+    private String name;
+
+    private String language;
+
+    private int yearOfPublishing;
+
+    private List<String> genres;
+
+    private Author author;
+}
+
+    ### Response:Here's how you can define your `Book` data transfer object (DTO) using Lombok annotations in Java:
+
+```java
+import lombok.*;
+
+import java.util.List;
+
+@Data // Generates getters and setters for all fields, including @NonNull annotated ones
+public class BookDto {
+
+    private Long id;
+    private String name;
+    private String language;
+    private Integer yearOfPublishing;
+    
+    @Singular("genre") // Use "genre" as parameter of addGenre method instead of just adding it directly to list
+    private List<String> genres = new ArrayList<>(); 
+    
+    private AuthorDto author;
+    
+}
+
+
+// Define corresponding Dto classes for other entities if needed 
+class AuthorDto {
+    private Long id;
+    private String firstName;
+    private String lastName;
+}
+``` 
+
+In this example we use `@Data` annotation from Lombok library which generates getter/setter methods automatically based on field names. We also added some additional annotations like `@Singular` to handle collections better - here we're telling Lombok to generate separate `addGenre()` method for each element of `genres`. Finally, we defined another nested DTO class called `AuthorDto`, but you could have used existing entity or even created one yourself depending on what kind of information you need to include in book details page.
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create unit test for this method using Mockito:
+
+public GenreDTO getOrCreateByName(String genre) {
+        GenreDTO genreDTO = genreRepository.getByGenre(genre);
+        if (genreDTO != null) {
+            return genreDTO;
+        } else {
+            genreDTO = new GenreDTO();
+            genreDTO.setGenre(genre);
+            return genreRepository.save(genreDTO);
+        }
+    }
+
+    ### Response:Here's how you can write a unit test for `getOrCreateByName` method with help of Mocking framework, i.e., Mockito in Java:
+
+```java
+@Test
+void testGetOrCreateByName() throws Exception{
+    // Given
+    String expectedGenreName = "Action";
+
+    when(mockGenreRepository.getByGenre("Action")).thenReturn(null);
+    
+    doReturn(new GenreDTO()).when(mockGenreRepository).save(any());
+
+    // When
+    GenreDTO actualResult = service.getOrCreateByName(expectedGenreName);
+
+    // Then
+    verify(mockGenreRepository, times(1)).getByGenre(eq(expectedGenreName));
+    verify(mockGenreRepository, times(1)).save(any());
+
+    assertEquals(actualResult.getGenre(), expectedGenreName);
+}
+```
+
+In above code snippet, we are mocking two objects - `GenreRepository` and its methods (`getByGenre()` and `save()`. We have also provided some stub values to these mocks so that they will be able to execute our tests successfully without any errors or exceptions being thrown. 
+
+We then call the tested method by passing `"Action"` as input parameter and store the result into variable named `actualResult`. Finally, we use assertions to check whether the returned value from the method matches what was expected.
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create BookAuditRepository class in Java with method with custom sql query to get last version from BOOK_AUDIT for a specific book
+
+    ### Response:Here's how you can implement `BookAuditRepository` and its methods using JDBC API:
+
+```java
+import java.sql.*;
+
+public class BookAuditRepository {
+
+    private final String url;
+    private final String username;
+    private final String password;
+    
+    public BookAuditRepository(String url, String username, String password) throws SQLException{
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        
+        try (Connection connection = DriverManager.getConnection(this.url, this.username, this.password)) {
+            // check if table exists or not
+            DatabaseMetaData metaData = connection.getMetaData();
+            
+            ResultSet resultSet = metaData.getTables(null, null, "BOOK_AUDIT", null);
+
+            boolean hasTable = false;
+            while (resultSet.next()) {
+                hasTable = true;
+                break;
+            }
+
+            if (!hasTable) {
+                System.out.println("Creating 'BOOK_AUDIT' table...");
+
+                Statement statement = connection.createStatement();
+                
+                StringBuilder sb = new StringBuilder();
+                sb.append("CREATE TABLE IF NOT EXISTS BOOK_AUDIT (\n");
+                sb.append("\tID INT PRIMARY KEY AUTO_INCREMENT,\n");
+                sb.append("\tISBN VARCHAR(20),\n");
+                sb.append("\tVERSION INT DEFAULT 1,\n");
+                sb.append("\tLAST_MODIFIED TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n");
+                sb.append("\tCREATED_BY VARCHAR(50)\n");
+                sb.append(")");
+
+                statement.executeUpdate(sb.toString());
+            } else {
+                System.out.println("'BOOK_AUDIT' table already exist.");
+            }
+
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        
+    }
+    
+    /**
+     * Get latest version of given ISBN number from BOOK_AUDIT table 
+     */
+    public int getLastVersionByIsbnNumber(String isbn) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+            connection = DriverManager.getConnection(url, username, password);
+            
+            String SQL = "SELECT VERSION FROM BOOK_AUDIT WHERE ISBN=? ORDER BY ID DESC LIMIT 1";
+            preparedStatement = connection.prepareStatement(SQL);
+            preparedStatement.setString(1,isbn);
+            
+            resultSet = preparedStatement.executeQuery();
+            
+            return resultSet.getInt("version") ;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeResources(connection,preparedStatement,resultSet);
+        }
+        
+        return -1;
+    }
+    
+    private void closeResources(Connection conn,PreparedStatement stmt,ResultSet rs) {
+        try {
+            if (rs!= null) {
+                rs.close();
+            }
+            if (stmt!= null) {
+                stmt.close();
+            }
+            if (conn!= null) {
+                conn.close();
+            }
+        } catch (SQLException se) {}
+    }
+    
+}
+```
+
+In above code snippet we have created a constructor which takes three parameters i.e., URL, Username and Password as input parameter. Inside it firstly checks whether there are any tables named `'BOOK_AUDIT'` present on database or not by calling `DatabaseMetaData`. If no such table found then creates one otherwise skips creating process. 
+
+Then provides two methods namely `getLastVersionByIsbnNumber()` and `closeResources()`. The former returns the latest version of specified ISBN number from `'BOOK_AUDIT'` table based on current timestamp order. And secondly closes all resources used during execution like closing connections, statements etc..
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create BookAuditRepository class extending from JpaRepository<BookAuditDTO, Long> with method with custom sql query to get last version from BOOK_AUDIT for a specific book. use @Query annotation to make custom query
+
+    ### Response:Here's how you can implement `BookAuditRepository` and its `@Query`:
+
+```java
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface BookAuditRepository extends JpaRepository<BookAuditDTO, Long> {
+
+    // Custom SQL Query
+    @Query(value = "SELECT * FROM BOOK_AUDIT WHERE BOOK_ID=? AND VERSION=(SELECT MAX(VERSION) FROM BOOK_AUDIT WHERE BOOK_ID=?)")
+    public List<Object[]> getLastVersionByBookId(Long bookId);
+    
+}
+```
+
+In this example, we're using Spring Data JPA repository framework alongside Java Persistence API (JPA). We've created our own implementation of `BookAuditRepository`, which extends from `JpaRepository`. 
+
+We have defined one method called `getLastVersionByBookId()` in our Repository Interface. This method uses `@Query` annotation to define a custom SQL query that retrieves all columns (`*`) from table named `BOOK_AUDIT` where `BOOK_ID` matches given parameter value and also filters by maximum `VERSION` number available for each unique combination of `BOOK_ID`. The result set will contain only those rows whose `BOOK_ID` match the input parameter and their corresponding latest row based on `VERSION` column values.
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: Generate java class Person with fields: name, surname, id and email, generate class PersonDTO with the same fields, this class needs to connect with database using jakarta.persistence, and generate Convertor class than converts DTO to BOM and BOM to DTO
+
+    ### Response:Here's how you can create Java classes for `Person` and `PersonDTO`, alongside their corresponding Jakarta Persistence entities (`BOM`) in order to interact with a relational database via JDBC or Hibernate ORM:
+
+```java
+import javax.persistence.*;
+
+@Entity // This annotation marks our entity as one managed by JPA/Hibernate
+public class BOMPerson {
+    @Id // Marks the primary key of our table (in case we have multiple PK columns)
+    private int id;
+
+    private String name;
+    private String surname;
+    private String email;
+    
+    public BOMPerson() {} // Default constructor needed for persistence framework
+
+    // Getters and setters are optional but recommended if your code uses them
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}
+
+
+// Here's the equivalent DTO class
+public class PersonDTO {
+    private Integer id;
+    private String name;
+    private String surname;
+    private String email;
+
+    public PersonDTO() {} // Constructor required for deserialization frameworks like Jackson
+
+    // Getter and setter methods here too...
+}
+```
+
+Now let's add some annotations to make these two classes compatible with Jakarta Persistence so they can be used together with a JPA implementation such as Hibernate:
+
+```java
+import org.hibernate.annotations.NaturalId;
+
+@MappedSuperclass // Indicates that this class should not be mapped itself, only its subclasses
+public abstract class AbstractJPADomainObject {
+    @Id // Primary key column definition
+    @GeneratedValue(strategy=GenerationType.IDENTITY) // Auto-generated ID value on insert
+    protected Long id;
+
+    @Version // Track object version changes automatically
+    protected Integer version;
+
+    @NaturalId // Allows us to use natural IDs instead of auto-incremented IDs when possible
+    protected String uniqueIdentifier;
+
+    // Constructors etc. omitted for brevity
+}
+
+@Entity // Maps this class to a physical table in the DB
+@Table(name="person") // Specifies custom table name (optional)
+public class BOMPerson extends AbstractJPADomainObject implements Serializable {
+    @Column(nullable=false) // Makes sure all non-null values are stored in the DB
+    private String name;
+
+    @Column(nullable=false)
+    private String surname;
+
+    @Column(unique=true, nullable=false)
+    private String email;
+
+    // No need for getters / setters since they're inherited from superclasses
+}
+
+// Equivalent DTO class - no additional annotations necessary because it doesn't extend any other domain objects
+```
+
+Finally, we'll define a converter between our data transfer object (DTO) and business object model (BOM), which will allow us to easily convert back and forth between the two representations without having to write separate conversion logic every time we want to manipulate data:
+
+```java
+import org.springframework.core.convert.converter.Converter;
+
+public class PersonToBomConverter implements Converter<PersonDTO, BOMPerson> {
+    @Override
+    public BOMPerson convert(final PersonDTO source) {
+        final BOMPerson target = new BOMPerson();
+
+        target.setName(source.getName());
+        target.setSurname(source.getSurname());
+        target.setEmail(source.getEmail());
+        
+        // Additional properties could also be copied over here
+
+        return target;
+    }
+}
+
+public class BomToPersonConverter implements Converter<BOMPerson, PersonDTO> {
+    @Override
+    public PersonDTO convert(final BOMPerson source) {
+        final PersonDTO target = new PersonDTO();
+
+        target.setId(source.getId());
+        target.setName(source.getName());
+        target.setSurname(source.getSurname());
+        target.setEmail(source.getEmail());
+
+        // Same thing applies here for additional properties
+
+        return target;
+    }
+}
+```
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: Create Configuration class that create House class bean and Street class bean using Spring Boot
+
+    ### Response:To create configuration class, we need to define beans for both house and street classes in our application context xml file as shown below
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="houseBean" class="com.example.House"></bean>
+    <bean id="streetBean" class="com.example.Street"></bean>
+    
+</beans>
+```
+
+Now let's write code for creating `Configuration` class which will use these two beans defined above to instantiate objects of type `House` and `Street`. 
+
+Here's how it can look like - 
+
+
+```java
+import org.springframework.context.annotation.*;
+
+
+@Configuration
+public class MyConfig {
+    
+    @Autowired
+    private House house;
+    
+    @Autowired
+    private Street street;
+    
+   // getters and setters methods here if needed    
+    
+}
+```
+
+In this example, `@Configuration` annotation indicates that this class contains some configurations related to spring framework such as component scanning or autowiring. We have also annotated with `@ComponentScan(basePackages = "com.example")`, so all components (classes) under com.example package would get scanned by default when ApplicationContext gets created. If you want more control over what should be included or excluded from scan, then you could specify packages explicitly instead of basePackage attribute value.
+
+We are injecting instances of `House` and `Street` into our config object through constructor injection using `@Autowired` annotations on respective fields. Now whenever any other class needs instance of either `House` or `Street`, they just need to declare their dependency on Config class and call its getter method to retrieve required instance.
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: Create java class Teacher with fields name, surname. Create Student class with fields name, age. Teacher and Student has OneToMany relation
+
+    ### Response:Here's how you can create `Teacher` and `Student` classes in Java along with their respective relationships using annotations such as `@OneToMany`.
+
+```java
+import javax.persistence.*;
+
+@Entity // This annotation indicates this class represents a table in database
+public class Teacher {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    
+    private String name;
+    private String surname;
+    
+    public Teacher() {}
+    
+    public Teacher(String name, String surname) {
+        super();
+        this.name = name;
+        this.surname = surname;
+    }
+    
+    // Getters and setters for all properties of teacher entity
+    
+}
+
+
+@Entity
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    
+    private String name;
+    private Integer age;
+    
+    @ManyToOne  // Many students to one teacher relationship (One-To-Many)
+    private Teacher teacher;
+    
+    
+    public Student() {}
+    
+    public Student(String name, Integer age) {
+        super();
+        this.name = name;
+        this.age = age;
+    }
+    
+    // getters and setters for all properties of student entity
+    
+}
+```
+
+In above code snippet, we have defined two entities - `Teacher` and `Student`, each representing its own data structure. The `Teacher` entity contains three attributes - `id`, `name`, and `surname`. It also defines a constructor which takes these values while creating new instances of `Teacher` object. 
+
+The second entity (`Student`) contains four attributes - `id`, `name`, `age`, and reference to another entity called `teacher`. Here, it uses `@ManyToOne` annotation to define many-to-one relationship between `Student` and `Teacher` tables. We use `@ManyToOne` because there may be multiple teachers who can teach different courses but only one teacher per course. Therefore, from perspective of `Student` entity, there will always exist exactly one corresponding instance of `Teacher` entity associated with it through foreign key column named "teacher_id".
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: Generate simple code on java using "Command" pattern
+
+    ### Response:The Command Pattern defines a separate class for each action, which encapsulates all information needed to perform it and allows you to parameterize other objects with different actions without coupling them directly. The main idea behind this pattern is to decouple object execution from its invoker by creating a command object that stores all necessary data in a single unit of work (command). This way, we can execute commands at any time or queue them up until they are ready to be executed.
+
+Here's how you could implement the Command Pattern in Java:
+
+1. Create interfaces for your commands:
+```java
+public interface ICommand {
+    void execute(); // Execute method signature
+
+    default boolean undo() {
+        return false; // Optional implementation of undo operation
+    }
+}
+```
+2. Implement concrete classes for each type of command:
+```java
+// Concrete command implementations
+class LightOn implements ICommand {
+    private final Light light;
+    
+    public LightOn(Light light) {
+        this.light = light;
+    }
+    
+    @Override
+    public void execute() {
+        System.out.println("Turning ON the light");
+        light.turnOn();
+    }
+    
+}
+
+class LightOff implements ICommand {
+    private final Light light;
+    
+    public LightOff(Light light) {
+        this.light = light;
+    }
+    
+    @Override
+    public void execute() {
+        System.out.println("Turning OFF the light");
+        light.turnOff();
+    }
+    
+    @Override
+    public boolean undo() {
+        if (!light.isOn())
+            throw new IllegalStateException("Cannot undo since light was already off.");
+        
+        try {
+            Thread.sleep(500); // Simulate delay before turning back on
+            
+            System.out.println("Undoing turn-off operation...");
+            light.turnOn();
+            
+        } catch (InterruptedException e) {}
+
+        return true;
+    }
+}
+```
+3. Define a Receiver class that will receive the requests and handle their execution:
+```java
+public abstract class Light {
+    protected String name;
+    
+    public Light(String name) {
+        this.name = name;
+    }
+    
+    public abstract void turnOn();
+    public abstract void turnOff();
+}
+```
+4. Finally, create a Invoker class that creates and executes the commands based on user input:
+```java
+import java.util.*;
+
+public class RemoteController {
+    private List<ICommand> history = new ArrayList<>();
+    
+    public void setCommand(ICommand cmd) throws Exception {
+        if (cmd == null ||!history.isEmpty() && history.get(history.size()-1).getClass().equals(cmd.getClass())) 
+            throw new IllegalArgumentException("Invalid command sequence!");
+        
+        history.add(cmd);
+        cmd.execute();
+    }
+    
+    public void undoLastCommand() throws Exception {
+        int lastIndex = history.size() - 1;
+        if (lastIndex < 0)
+            throw new NoSuchElementException("No previous command found!");
+        
+        ICommand prevCmd = history.remove(lastIndex);
+        prevCmd.undo();
+    }
+}
+```
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: create Java class Book that connected to database with fields id, name. Create BookRepository and BookService that need to get, remove and update book. And create mockito test to Book class
+
+    ### Response:Here's how you can implement `Book` class in Java using JDBC for connecting to MySQL database:
+
+```java
+import java.sql.*;
+
+public class Book {
+    private int id;
+    private String name;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // Getters & Setters...
+    
+    /**
+     * Connects to MySQL Database and retrieves all books from table 'books'
+     */
+    public static List<Book> getAllBooks() throws SQLException{
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase", "username", "password");
+
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM books;");
+        
+        ArrayList<Book> booksList = new ArrayList<>();
+        
+        while (resultSet.next()) {
+            Book book = new Book();
+            
+            book.setId(resultSet.getInt("id"));
+            book.setName(resultSet.getString("name"));
+
+            booksList.add(book);
+        }
+        
+        return booksList;
+    }
+
+    /**
+     * Deletes a specific book by its ID from MySQL Database 
+     */
+    public boolean deleteById(int id) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase", "username", "password");
+
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM books WHERE id=?");
+        preparedStatement.setInt(1, id);
+
+        int rowsDeleted = preparedStatement.executeUpdate();
+
+        if (rowsDeleted > 0) {
+            System.out.println("Book deleted successfully.");
+            return true;
+        } else {
+            System.out.println("Failed to delete book.");
+            return false;
+        }
+    }
+
+    /**
+     * Updates a specific book by its ID with given values from MySQL Database 
+     */
+    public boolean updateById(int id, String newName) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase", "username", "password");
+
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE books SET name=? WHERE id=?");
+        preparedStatement.setString(1, newName);
+        preparedStatement.setInt(2, id);
+
+        int rowsUpdated = preparedStatement.executeUpdate();
+
+        if (rowsUpdated > 0) {
+            System.out.println("Book updated successfully.");
+            return true;
+        } else {
+            System.out.println("Failed to update book.");
+            return false;
+        }
+    }
+    
+}
+```
+
+And here are some sample tests written using JUnit and Mockito framework:
+
+```java
+@RunWith(MockitoJUnitRunner.class)
+public class TestBookClass {
+
+    @Mock
+    private Connection connection;
+
+    @Test
+    public void testGetAllBooks() throws Exception {
+        when(connection.createStatement()).thenReturn(mock(PreparedStatement.class));
+        when(connection.prepareStatement("SELECT * FROM books;")).thenReturn(mock(ResultSet.class));
+
+        doReturn(true).when(connection).isClosed();
+
+        List<Book> result = Book.getAllBooks();
+
+        verify(connection, times(3)).close();
+        assertEquals(result.size(), 5);
+    }
+
+    @Test
+    public void testDeleteById() throws Exception {
+        when(connection.prepareStatement("DELETE FROM books WHERE id=?;")).thenReturn(mock(PreparedStatement.class));
+
+        doReturn(false).when(connection).isClosed();
+
+        assertFalse(new Book().deleteById(-1));
+
+        verify(connection, never()).commit();
+        verify(connection, atLeastOnce()).rollback();
+        verify(connection, times(4)).setAutoCommit(anyBoolean());
+        verifyNoMoreInteractions(connection);
+    }
+
+    @Test
+    public void testUpdateById() throws Exception {
+        when(connection.prepareStatement("UPDATE books SET name=? WHERE id=?;")).thenReturn(mock(PreparedStatement.class));
+
+        doReturn(false).when(connection).isClosed();
+
+        assertTrue(new Book().updateById(1, "New Name"));
+
+        verify(connection, never()).commit();
+        verify(connection, atLeastOnce()).rollback();
+        verify(connection, times(4)).setAutoCommit(anyBoolean());
+        verifyNoMoreInteractions(connection);
+    }
+
+}
+```
+================================================================
+Below is an instruction that describes a task. Write a response that appropriately completes the request
+
+    ### Instruction: Database has table Teacher with fields id, name, surname and table Lesson with fields id and name, these tables has manyToMany relation, create these tables in java classes
+
+    ### Response:Teacher class
+
+```java
+import javax.persistence.*;
+
+@Entity(name = "teacher") // specify entity name as teacher to avoid confusion between Table and Entity names 
+public class Teacher {
+
+    @Id
+    private int id;
+    
+    private String name;
+    
+    private String surname;
+    
+    public Teacher() {}
+    
+   /* getters and setters */
+    
+}
+```
+
+Lesson class
+
+```java
+import javax.persistence.*;
+
+@Entity(name="lesson")  // specify entity name as lesson to avoid confusion between Table and Entity names  
+public class Lesson {
+
+    @Id
+    private int id;
+    
+    private String name;
+    
+    @ManyToMany(mappedBy = "lessons", fetch=FetchType.LAZY) 
+    private List<Teacher> teachers = new ArrayList<>();
+    
+    public Lesson(){}
+
+   /* getters and setters */
+    
+}
+```
+================================================================

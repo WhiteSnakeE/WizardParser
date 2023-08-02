@@ -14,6 +14,8 @@ public class Parser {
 
     private final ParserFileReader parserFileReader;
 
+    private final String startOfFile = "^```[a-zA-Z].*$" ;
+
     public Parser(ParserFileWriter parserFileWriter, ParserFileCreator parserFileCreator, ParserFileReader parserFileReader) {
         this.parserFileWriter = parserFileWriter;
         this.parserFileCreator = parserFileCreator;
@@ -32,11 +34,8 @@ public class Parser {
                     new BufferedReader(new FileReader(from));
 
             while ((line = bufferedReader.readLine()) != null) {
-                if (line.matches("^```[a-zA-Z].*$")) {
+                if (line.matches(startOfFile)) {
                     fileExtension = line.substring(3);
-                    if (!fileExtension.equals("java")) {
-                        className = "pom";
-                    }
                     continue;
                 }
                 if (fileExtension != null) {
@@ -49,7 +48,7 @@ public class Parser {
                     } else {
                         fileValue.append(line);
                         if (className == null) {
-                            className = parserFileReader.findClassName(line);
+                            className = parserFileReader.findClassName(line,fileExtension);
                         }
                         fileValue.append("\n");
                     }
@@ -61,14 +60,5 @@ public class Parser {
 
     }
 
-
-//    private String findFileExtension(String line,String fileExtension, String className){
-//        if (line.matches("^```[a-zA-Z].*$")) {
-//            fileExtension = line.substring(3);
-//            if (!fileExtension.equals("java")){
-//                className = "pom";
-//            }
-//        }
-//    }
 
 }

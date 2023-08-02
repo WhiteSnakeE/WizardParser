@@ -117,7 +117,8 @@ public class Book {
 
     // getters and setters
 }
-
+```
+```java
 public class Author {
     private long id;
     private String firstName;
@@ -128,7 +129,9 @@ public class Author {
 
     // getters and setters
 }
+```
 
+```java
 public enum Genre {
     SCIENCE_FICTION,
     FANTASY,
@@ -309,7 +312,8 @@ public class BookConverter {
         return book;
     }
 }
-
+```
+```java
 public class AuthorConverter {
 
     public static AuthorDTO toDTO(Author author) {
@@ -391,7 +395,8 @@ public class BookService {
         books.add(book);
     }
 }
-
+```
+```java
 public class AuthorService {
     private List<Author> authors = new ArrayList<>();
 
@@ -421,67 +426,6 @@ Note that in this implementation, the `get` method returns `null` if the object 
 
         ### Response:Sure, I can help you with that. Here's an example of how you can create the BookRepository and AuthorRepository classes:
 
-```python
-from typing import List
-
-class BookRepository:
-    def __init__(self):
-        self.books = []
-
-    def add_book(self, book):
-        self.books.append(book)
-
-    def get_all_books(self) -> List:
-        return self.books
-
-class AuthorRepository:
-    def __init__(self):
-        self.authors = []
-
-    def add_author(self, author):
-        self.authors.append(author)
-
-    def get_all_authors(self) -> List:
-        return self.authors
-```
-
-In this example, we have created two classes, `BookRepository` and `AuthorRepository`, which are responsible for storing and retrieving data related to books and authors. We have used a simple list to store the data, but you can use a database or any other storage mechanism depending on your requirements.
-
-Now, let's say we have a `BookService` class that needs to retrieve all books from the repository. We can modify the `BookService` class to use the `BookRepository` class as follows:
-
-```python
-class BookService:
-    def __init__(self, book_repository: BookRepository):
-        self.book_repository = book_repository
-
-    def get_all_books(self) -> List:
-        return self.book_repository.get_all_books()
-```
-
-In this example, we have created a `BookService` class that takes a `BookRepository` instance as a constructor argument. We have then modified the `get_all_books` method to use the `get_all_books` method of the `BookRepository` instance to retrieve all books from the repository.
-
-Similarly, we can modify the `AuthorService` class to use the `AuthorRepository` class as follows:
-
-```python
-class AuthorService:
-    def __init__(self, author_repository: AuthorRepository):
-        self.author_repository = author_repository
-
-    def get_all_authors(self) -> List:
-        return self.author_repository.get_all_authors()
-```
-
-In this example, we have created an `AuthorService` class that takes an `AuthorRepository` instance as a constructor argument. We have then modified the `get_all_authors` method to use the `get_all_authors` method of the `AuthorRepository` instance to retrieve all authors from the repository.
-
-By using repositories in methods, we can easily swap out the storage mechanism without affecting the rest of the application.
-================================================================
-
-        Below is an instruction that describes a task. Write a response that appropriately completes the request
-
-        ### Instruction: Create BookController class with two methods:
-        registerBook(Book book) with '/register' endpoint and getBookByid(Long bookId) with '/get' endpoint, use BookService in these methods for saving book and getting book.
-
-        ### Response:Here's the implementation of the BookController class with the two methods:
 
 ```java
 @RestController

@@ -1,0 +1,1231 @@
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create Java classes according to this PlantUML diagram:
+
+@startuml
+
+entity Book {
+id: long
+name: string
+language: string
+yearOfPublishing: int
+}
+
+entity Author {
+id: long
+firstName: string
+lastName: string
+nationality: string
+}
+
+enum Genre {
+SCIENCE_FICTION
+FANTASY
+HORROR
+TECHNICAL_WRITING
+EROTIC_FICTION
+WESTERN
+OTHER
+}
+
+Book "1..N" -o "1" Author: book
+Book "1" o- "1..N" Genre: genre
+Author "1" o- "1..N" Genre: genre
+Author "1..1" -o "1" Book: author
+
+@enduml
+    ASSISTANT:
+    
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Book {
+    private Long id;
+    private String name;
+    private String language;
+    private int yearOfPublishing;
+
+    public Book(Long id, String name, String language, int yearOfPublishing) {
+        this.id = id;
+        this.name = name;
+        this.language = language;
+        this.yearOfPublishing = yearOfPublishing;
+    }
+
+    // Getters and setters for all fields
+
+    public List<Author> getAuthors() {
+        return authors;
+    }
+
+    private List<Author> authors = new ArrayList<>();
+}
+```
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public enum Genre {
+    SCIENCE_FICTION("SCIENCE_FICTION"),
+    FANTASY("FANTASY"),
+    HORROR("HORROR"),
+    TECHNICAL_WRITING("TECHNICAL_WRITING"),
+    EROTIC_FICTION("EROTIC_FICTION"),
+    WESTERN("WESTERN");
+
+    private final String value;
+
+    private Genre(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
+}
+```
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class Author {
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private String nationality;
+
+    public Author(Long id, String firstName, String lastName, String nationality) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nationality = nationality;
+    }
+
+    // Getters and setters for all fields
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    private List<Book> books = new ArrayList<>();
+}
+```
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create 3 java classes: class Person with fields: 'name', 'surname' and 'email'; class PersonService with method registerPerson(); class PersonControler with method registerPerson() with endpoint '/register' and field personService
+    ASSISTANT:
+    1. Create a new Java project in your preferred IDE or text editor.
+2. Create three separate files for each of the following classes:
+	* `Person.java` (with fields `name`, `surname`, and `email`)
+	* `PersonService.java` (with a `registerPerson()` method)
+	* `PersonController.java` (with a `registerPerson()` method and an endpoint `/register` field)
+3. Open `PersonController.java`. Add the following import statements at the beginning:
+```typescript
+import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import com.example.model.Person;
+import com.example.service.PersonService;
+public class PersonController {
+   //...
+}
+```
+1. Define the `PersonController` class by adding the necessary methods and variables:
+```java
+@RestController
+@RequestMapping("/api/person")
+public class PersonController {
+    @Autowired
+    private List<Person> persons;
+    @Autowired
+    private PersonService personService;
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON)
+    public ResponseEntity<Void> registerPerson(@Valid @RequestBody Person person) {
+        this.persons.add(this.personService.registerPerson(person));
+        return ResponseEntity.ok().build();
+    }
+}
+```
+1. In `PersonService.java`:
+* Import the necessary packages:
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.example.model.Person;
+import com.example.controller.PersonController;
+public class PersonService {
+    @Autowired
+    private PersonController personController;
+    public void registerPerson(String name, String surname, String email) {
+        Person person = new Person();
+        person.setName(name);
+        person.setSurname(surname);
+        person.setEmail(email);
+        this.personController.registerPerson(person);
+    }
+}
+```
+1. Finally, add the main application class that will initialize the Spring framework and inject dependencies:
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.support.DelegatingRunnableFuture;
+import org.springframework.scheduling.support.ResizableDelaySubscription;
+import org.springframework.scheduling.support.SimpleTrigger;
+import org.springframework.scheduling.timer.Timer;
+import org.springframework.scheduling.timer.TimerJob;
+import org.springframework.scheduling.timer.TimerManager;
+import org.springframework.scheduling.config.TimespanConfigurer;
+import org.springframework.scheduling.config.TimespanPolicy;
+import org.springframework.scheduling.config.CronTrigger;
+import org.springframework.scheduling.config.IntervalFunction;
+import org.springframework.scheduling.config.PeriodicTrigger;
+import org.springframework.scheduling.config.ScheduledMethodRunnable;
+import org.springframework.scheduling.config.ScheduledMethodRunner;
+import org.springframework.scheduling.support.CronSequenceGenerator;
+import org.springframework.scheduling.support.DelegatingScheduledFuture;
+import org.springframework.scheduling.support.ElasticThreadPoolTim
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create 3 java classes: 
+1) class Person with fields: 'name', 'surname' and 'email'. Use Lombok annotations for getters and setters; 
+2) class PersonService with method registerPerson(); 
+3) class PersonControler with method registerPerson() with endpoint '/register' and field presonService
+    ASSISTANT:
+    1. Create the `Person` class with Lombok annotations:
+```java
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@AllArgsConstructor
+@Getter
+@Setter
+public class Person {
+    private String name;
+    private String surname;
+    private String email;
+}
+```
+1. Create the `PersonService` class with the `registerPerson()` method:
+```java
+import javax.inject.Inject;
+
+class PersonService {
+    @Inject
+    public PersonService(Person person) {
+        // Register logic here
+    }
+
+    void registerPerson() {
+        // Registration logic goes here
+    }
+}
+```
+1. Create the `PersonController` class with the `registerPerson()` method and injected `PersonService`:
+```java
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.HttpRequestHandler;
+import reactor.core.publisher.Mono;
+
+@RestController
+@RequestMapping("/api/person")
+public class PersonController implements HttpRequestHandler {
+
+    @Autowired
+    private PersonService personService;
+
+    @PostConstruct
+    public void init() {
+        // Initiate the service here if needed
+    }
+
+    @Override
+    public Mono<Void> handle(HttpServletRequest request) {
+        return personService.registerPerson().flatMap((registrationResult) -> {
+            if (registrationResult.isSuccess()) {
+                return Mono.just(() -> System.out.println("Registration successful"));
+            } else {
+                return Mono.error(new RuntimeException("Failed to register the person"));
+            }
+        });
+    }
+}
+```
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create 3 java classes: 
+1) class Person with fields: 'name', 'surname' and 'email'. Use Getter and Setter annotations for this class; 
+2) class PersonService with method registerPerson(); 
+3) class PersonControler with method registerPerson() with endpoint '/register' and field presonService
+    ASSISTANT:
+    1. `Person` Class:
+```java
+import javax.annotation.Generated;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+@Entity
+@Generated("org.hibernate.tool.model.generator.hbm.entity.table.RelationProviderImpl")
+public class Person {
+    @Id
+    private Long id;
+    @NotBlank
+    @Size(max = 50)
+    private String name;
+    @NotBlank
+    @Size(max = 50)
+    private String surname;
+    @NotBlank
+    @Size(max = 100)
+    private String email;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}
+```
+1. `PersonService` Class:
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PersonService {
+    @Autowired
+    private PersonRepository personRepository;
+
+    public void registerPerson(Person person) {
+        personRepository.save(person);
+    }
+}
+```
+1. `PersonController`:
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.support.TransactionTemplate;
+
+@Controller
+@RequestMapping("/api/v1")
+@EnableWebMvc
+public class PersonController {
+    @Autowired
+    private PersonService personService;
+
+    @PostMapping("/register")
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    public ResponseEntity<Void> register(@Valid @RequestBody Person person) {
+        personService.registerPerson(person);
+        return ResponseEntity.ok().build();
+    }
+}
+```
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create Java method which returns true if email is valid. else returns false. use regex
+    ASSISTANT:
+    ​
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: find and fix errors in this Java code:
+
+public long saveChanges(BookAuditDTO bookAuditDTO) {
+    Long lastVersion = bookAuditRepository..getLastVersion(bookAuditDTO.getBookId());
+    lastVersion = (lastVersion = null) ? 1 : lastVersion + 1;
+    bookAuditDTO.setVersion(lastVersion);
+
+    BookAuditDTO insertedHouseDTO = bookAuditRepository.save(bookAuditDTO);
+    return insertedHouseDTO.getId();
+}
+    ASSISTANT:
+    1. You are missing a semicolon at the end of the first line. Add it to make the code compilable:
+```java
+public long saveChanges(BookAuditDTO bookAuditDTO) {
+    //...
+}
+```
+2. There is a syntax error in the following line:
+```typescript
+Long lastVersion = bookAuditRepository..getLastVersion(bookAuditDTO.getBookId());
+```
+Replace `.` with `instanceof` or `getInstance()` method call for proper object instantiation:
+```kotlin
+Long lastVersion = bookAuditRepository.getLastVersion(bookAuditDTO.getBookId());
+```
+3. In the next line, you use the same variable name (`lastVersion`) for both the assigned value and the condition. This can lead to confusion. Consider using different names:
+```kotlin
+long currentVersion = (lastVersion == null)? 1 : lastVersion + 1;
+bookAuditDTO.setVersion(currentVersion);
+```
+4. It seems that there is no need to create a new instance of `BookAuditDTO` inside the method. Remove the following lines:
+```kotlin
+BookAuditDTO insertedHouseDTO = bookAuditRepository.save(bookAuditDTO);
+return insertedHouseDTO.getId();
+```
+The method should look like this after fixing these issues:
+```java
+public long saveChanges(BookAuditDTO bookAuditDTO) {
+    Long lastVersion = bookAuditRepository.getLastVersion(bookAuditDTO.getBookId());
+    if (lastVersion == null) {
+        lastVersion = 1;
+    } else {
+        lastVersion = lastVersion + 1;
+    }
+    bookAuditDTO.setVersion(lastVersion);
+    // No need to create a new instance here
+    return -1; // Or any other default value when nothing was saved
+}
+```
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: add spaces before each field in this class: 
+
+@Getter
+@Setter
+public class Book {
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private long id;
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private String name;
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private String language;
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private int yearOfPublishing;
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private List<String> genres;
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private Author author;
+}
+    ASSISTANT:
+    
+```csharp
+@Getter
+@Setter
+public class Book {
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private long id;
+    
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private String name;
+    
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private String language;
+    
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private int yearOfPublishing;
+    
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private List<String> genres;
+    
+    @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+    private Author author;
+}
+```
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: add @JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class) below every field in this class:
+
+@Getter
+@Setter
+public class Book {
+
+    private long id;
+
+    private String name;
+
+    private String language;
+
+    private int yearOfPublishing;
+
+    private List<String> genres;
+
+    private Author author;
+}
+    ASSISTANT:
+    1. Add the `@JsonView` annotation below each field in the `Book` class with the desired view object `BookView.FullBookInfoWithAuthorNameAndSurname`. Here is the modified `Book` class:
+```typescript
+@Getter
+@Setter
+@JsonView(BookView.FullBookInfoWithAuthorNameAndSurname.class)
+public class Book {
+  //... other fields and methods...
+}
+```
+This will ensure that all properties of the `Book` class are serialized/deserialized using the specified view object when working with Jackson (or any other JSON library that supports JsonViews).
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: change every columns` name to lowercase
+
+databaseChangeLog:
+  - changeSet:
+      id: create_book_audit_genres_table
+      author: valentynl
+      changes:
+        - createTable:
+            tableName: BOOKS_AUDIT_GENRES
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: PK_BOOK_AUDIT_GENRES
+              - column:
+                  name: BOOK_AUDIT_ID
+                  type: BIGINT
+                  constraints:
+                    unique: false
+                    nullable: false
+                    foreignKeyName: FK_BOOK_AUDIT_GENRES
+                    references: BOOK_AUDIT(ID)
+                    deleteCascade: true
+              - column:
+                  name: GENRE_ID
+                  type: BIGINT
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: GENRE_NAME
+                  type: varchar(100)
+                  constraints:
+                    unique: false
+                    nullable: false
+    ASSISTANT:
+    
+    databaseChangeLog:
+      - changeSet:
+          id: create_book_audit_genres_table
+          author: valentynl
+          changes:
+            - createTable:
+                tableName: books\_audit\_genres
+                columns:
+                  - column:
+                      name: id
+                      type: bigint
+                      autoIncrease: true
+                      constraints:
+                        nullable: false
+                        primaryKey: true
+                        primaryKeyName: pk\_books\_audit\_genres
+                  - column:
+                      name: book\_audit\_id
+                      type: bigint
+                      constraints:
+                        unique: false
+                        nullable: false
+                        foreignKey: true
+                        foreignKeyName: fk\_book\_audit\_genres
+                        references: book\_audit(id)
+                        onDelete: cascade
+                        onUpdate: cascade
+                  - column:
+                      name: genre\_id
+                      type: bigint
+                      constraints:
+                        unique: false
+                        nullable: false
+                  - column:
+                      name: genre\_name
+                      type: varchar(100)
+                      constraints:
+                        unique: false
+                        nullable: false
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create liquibase change set in yaml to create table Order. There are columns: id, customer_id, product_id, amount, date_of_order, city, post_office. Use uppercase for columns` names. All fields are not nullable. Add foreign keys for columns customer_id and product_id. Set author as vladyslavt
+    ASSISTANT:
+    ```yaml
+users:
+  vladyslavt:
+    name: Vladyslav Tytarenko
+    email: vladyslav@example.com
+    liquiBase:
+      changeSets:
+        create_orders:
+          changes:
+            - type: create
+              schemaName: public
+              tableName: Order
+              columns:
+                - column: ID
+                  description: Id of the order
+                  type: int
+                  remarks: 'Primary key'
+                - column: CUSTOMER_ID
+                  description: Customer id associated with the order
+                  type: int
+                  remarks: 'Foreign key referencing customers'
+                - column: PRODUCT_ID
+                  description: Product id associated with the order
+                  type: int
+                  remarks: 'Foreign key referencing products'
+                - column: AMOUNT
+                  description: Amount of the order
+                  type: decimal
+                  precision: 10
+                  scale: 2
+                - column: DATE_OF_ORDER
+                  description: Date when the order was placed
+                  type: datetime
+                - column: CITY
+                  description: City where the order was made
+                  type: varchar(50)
+                - column: POST_OFFICE
+                  description: Post office where the order is shipped from
+                  type: varchar(50)
+```
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create java class KafkaConfig to configure Kafka producer
+    ASSISTANT:
+    1. Add the required dependencies for Kafka in your `pom.xml` or `build.gradle` file:
+```xml
+<dependencies>
+  <dependency>
+    <groupId>org.apache.kafka</groupId>
+    <artifactId>kafka-clients</artifactId>
+    <version>2.8.0</version>
+  </dependency>
+</dependencies>
+```
+For Gradle:
+```groovy
+implementation 'org.apache.kafka:kafka-clients:2.8.0'
+```
+1. Create the Java class `KafkaConfig`:
+```java
+// KafkaConfig.java
+package com.example;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.common.config.SaslConfigs;
+import org.apache.kafka.common.serialization.IntegerSerializer;
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.testkit.IntegrationTest;
+import org.apache.kafka.testkit.kafkatestingutils.KafkaTestUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
+
+import java.util.Properties;
+
+public abstract class KafkaProducerBase {
+    protected String topic;
+    protected Properties producerProps;
+    protected StreamsBuilder builder;
+
+    public KafkaProducerBase(String topic) {
+        this.topic = topic;
+    }
+
+    @Before
+    public void setup() {
+        // Set up properties for Kafka producer
+        producerProps = new Properties();
+        producerProps.put(ProducerConfig.BOOTSTRAP_SERVERS, "localhost:9092");
+        producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_NAME, IntegerSerializer.class.getName());
+        producerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_NAME, IntegerSerializer.class.getName());
+
+        if (isIntegrationTest()) {
+            // Configure Kafka test utils for integration tests
+            SaslConfigs.setAuthenticate(producerProps, "admin", "passw0rd".toCharArray());
+            KafkaTestUtils.createTopic(topic, 1, IntegrationTest.NUM_PARTITIONS);
+        } else {
+            // Use temporary folder for testing
+            Properties kafkaConf = new Properties();
+            kafkaConf.load(new FileInputStream("src/test/resources/test.conf"));
+            KafkaTestUtils.createTopic(topic, 1, 1, false, kafkaConf);
+        }
+    }
+
+    @After
+    public void cleanup() {
+        KafkaTestUtils.deleteTopic(topic);
+    }
+
+    protected boolean isIntegrationTest() {
+        return false; // Override in subclasses to enable integration tests
+    }
+}
+```
+This code provides a basic configuration for a Kafka producer using the `KafkaConfig` class. You can extend this class in your specific use case and customize it as needed.
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create DTO class according to this class: 
+
+@Getter
+@Setter
+public class Book {
+
+    private long id;
+
+    private String name;
+
+    private String language;
+
+    private int yearOfPublishing;
+
+    private List<String> genres;
+
+    private Author author;
+}
+    ASSISTANT:
+    ​
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create unit test for this method using Mockito:
+
+public GenreDTO getOrCreateByName(String genre) {
+        GenreDTO genreDTO = genreRepository.getByGenre(genre);
+        if (genreDTO != null) {
+            return genreDTO;
+        } else {
+            genreDTO = new GenreDTO();
+            genreDTO.setGenre(genre);
+            return genreRepository.save(genreDTO);
+        }
+    }
+    ASSISTANT:
+    1. First, you need to add the required dependencies to your build file. For Maven, add the following dependency in your `pom.xml`:
+```xml
+<dependency>
+  <groupId>org.mockito</groupId>
+  <artifactId>mockito-core</artifactId>
+  <version>3.6.0</version>
+  <scope>test</scope>
+</dependency>
+```
+For Grad
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create BookAuditRepository class in Java with method with custom sql query to get last version from BOOK_AUDIT for a specific book
+    ASSISTANT:
+    
+First, let's define the `Book` entity that will be audited:
+```java
+public record Book(int id, String title);
+```
+Next, we can create the `BookAudit` entity to store the history of changes made to the book:
+```java
+public record AuditableEntity<Book> {
+    public List<BookAudit> audits() {
+        return Stream.concat(Stream.of(this), Stream.of(auditHistory))
+               .sorted((a, b) -> Long.compare(b.createdAt, a.createdAt))
+               .collect(Collectors.toList());
+    }
+}
+```
+Now, let's implement the `BookAuditRepository` interface:
+```java
+import java.sql.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+public interface BookAuditRepository extends JdbcRepository<BookAudit, Integer> {
+    Optional<BookAudit> findLastVersionForBook(Book book);
+}
+```
+In the implementation of the `findLastVersionForBook()` method, we'll use a custom SQL query to fetch the last version of the book audit:
+```java
+@Override
+public Optional<BookAudit> findLastVersionForBook(Book book) {
+    String sql = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY created_at DESC) AS row_num, * FROM book_audit WHERE book_id =?) WHERE row_num = 1";
+    try (Connection connection = dataSource.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setInt(1, book.id);
+        try (ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                Date createdAt = resultSet.getTimestamp("created_at").before(Instant.now().plusDays(1))? null : resultSet.getTimestamp("created_at");
+                String authorId = resultSet.getString("author_id");
+                String changeDescription = resultSet.getString("change_description");
+                return Optional.of(new BookAudit(id, book, createdAt, authorId, changeDescription));
+            } else {
+                throw new NoSuchElementException("No last version found for the given book.");
+            }
+        }
+    } catch (SQLException e) {
+        throw new UncheckedSqlException("Failed to retrieve the last version of the book audit.", e);
+    }
+}
+```
+This code assumes you have a database connection pool (`dataSource`) and a suitable database schema with tables like `book_audit`, `books`, and possibly an `authors` table. Make sure to adjust the SQL query according to your database schema and requirements.
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create BookAuditRepository class extending from JpaRepository<BookAuditDTO, Long> with method with custom sql query to get last version from BOOK_AUDIT for a specific book. use @Query annotation to make custom query
+    ASSISTANT:
+    
+To create a `BookAuditRepository` that extends `JpaRepository<BookAuditDTO, Long>` and includes a custom SQL query using `@Query`, you can follow these steps:
+
+1. First, ensure you have the required dependencies in your build file (Maven or Gradle). For example, if you are using Maven, add the following dependency in your `pom.xml`:
+```xml
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+```
+2. Create the `BookAuditRepository` class that extends `JpaRepository`. In this case, we will assume that `BookAuditDTO` is a simple DTO with a single field (`versionNumber`) corresponding to the `VERSION` column in the database table, and that the table name is `BOOK_AUDIT`. You may need to adjust the code based on your actual data model.
+```java
+// Import necessary classes
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.domain.Specification;
+import java.time.LocalDate;
+
+// Define the BookAuditDTO
+public record BookAuditDTO(Long versionNumber);
+
+// Create the BookAuditRepository
+@Repository
+public interface BookAuditRepository extends JpaRepository<BookAuditDTO, Long> {
+}
+```
+3. Add the custom SQL query using the `@Query` annotation. This example assumes you want to retrieve the last version of the book audit for a specific book by its title. Replace 'TITLE' with the appropriate column name in your database table.
+```java
+// Implement the custom SQL query
+@Query("SELECT AVG(version) AS lastVersion FROM BOOK_AUDIT WHERE TITLE = :title ORDER BY VERSION DESC LIMIT 1")
+public BookAuditDTO findLastVersionByTitle(@Param("title") String title);
+```
+Now you should be able to use the `findLastVersionByTitle()` method on the `BookAuditRepository` to fetch the last version of the book audit for a specific book by its title.
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: Generate java class Person with fields: name, surname, id and email, generate class PersonDTO with the same fields, this class needs to connect with database using jakarta.persistence, and generate Convertor class than converts DTO to BOM and BOM to DTO
+    ASSISTANT:
+    1. Create `Person` class with fields `name`, `surname`, `id`, and `email`:
+```java
+// Person.java
+package com.example;
+
+public record class Person(String name, String surname, Long id, String email) {
+}
+```
+1. Create `PersonDTO` class with the same fields as `Person`:
+```java
+// PersonDTO.java
+package com.example;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public record class PersonDTO(String name, String surname, Long id, String email) {
+}
+```
+1. Set up Jakarta Persistence for connecting to the database (in this example, I will use in-memory H2 Database):
+```java
+// persistence.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence/persistence-3.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/persistence-3.0 http://download.oracle.com/otn_publisher/pkg/ejb/persistence-3.0.xsd"
+             version="3.0">
+
+  <persistence-unit name="myPU" transaction-type="RESOURCE_LOCAL">
+    <class>com.example.Person</class>
+    <class>com.example.PersonDTO</class>
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:testdb;DB\_CLOSE\_ON\_EXIT=FALSE;MODE=PostgreSQL"/>
+      <property name="javax.persistence.jdbc.user" value="sa"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+    </properties>
+  </persistence-unit>
+</persistence>
+```
+1. Implement the converter class that converts `PersonDTO` to `Person` and vice versa:
+```java
+// Converter.java
+package com.example;
+
+import com.example.Person;
+import com.example.PersonDTO;
+import org.apache.commons.beanutils.Converter;
+
+import java.time.LocalDate;
+
+public class PersonConverter implements Converter {
+
+    @Override
+    public boolean canConvert(Class clazz1, Class clazz2) {
+        return true; // Can convert from both classes
+    }
+
+    @Override
+    public Object convertValue(Object value, Class clazz) {
+        if (value instanceof PersonDTO && clazz.equals(Person.class)) {
+            Person person = new Person();
+            ((PersonDTO) value).setName(((PersonDTO) value).getName());
+            ((PersonDTO) value).setSurname(((PersonDTO) value).getSurname());
+            ((PersonDTO) value).setId(((PersonDTO) value).getId());
+            ((PersonDTO) value).setEmail(((PersonDTO) value).getEmail());
+            return person;
+        } else if (value instanceof Person && clazz.equals(PersonDTO.class)) {
+            PersonDTO personDTO = new PersonDTO();
+            ((Person) value).setName(((Person) value).getName());
+            ((Person) value).setSurname(((Person) value).getSurname());
+            ((Person) value).setId(((Person) value).getId());
+            ((Person) value).setEmail(((Person) value).getEmail());
+            return personDTO;
+        }
+        throw new IllegalArgumentException("Cannot convert value of type " + value.getClass().getName() + " to "
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: Create Configuration class that create House class bean and Street class bean using Spring Boot
+    ASSISTANT:
+    1. Add the required dependencies in your build file (Maven or Grad
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: Create java class Teacher with fields name, surname. Create Student class with fields name, age. Teacher and Student has OneToMany relation
+    ASSISTANT:
+    1. Create Java interface `IStudent` for the Student class:
+```java
+public interface IStudent {
+  String getName();
+  int getAge();
+}
+```
+1. Implement the Student class using the `IStudent` interface:
+```java
+public class Student implements IStudent {
+  private String name;
+  private int age;
+
+  public Student(String name, int age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  @Override
+  public int getAge() {
+    return age;
+  }
+}
+```
+1. Create the Teacher class with a list of Students as a field:
+```java
+import java.util.List;
+
+public class Teacher {
+  private String name;
+  private String surname;
+
+  public Teacher(String name, String surname) {
+    this.name = name;
+    this.surname = surname;
+  }
+
+  public List<IStudent> students; // Using a generic type for the student list
+}
+```
+Now you can create instances of both classes and establish the one-to-many relationship between them:
+```java
+Teacher teacher = new Teacher("John Doe", "Doe");
+student1 := new Student("Alice", 16);
+student2 := new Student("Bob", 17);
+teacher.students := [student1, student2];
+```
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: Generate simple code on java using "Command" pattern
+    ASSISTANT:
+    1. Create a `Command` interface with a single abstract method:
+```java
+public interface Command {
+  public void execute();
+}
+```
+2. Implement the concrete commands for your specific use case. For example, if you want to create a calculator application, you might have these commands:
+* Add: adds two numbers together.
+* Subtract: subtracts one number from another.
+* Multiply: multiplies two numbers.
+* Divide: divides one number by another.
+```java
+public class Add implements Command {
+  private final double leftOperand;
+  private final double rightOperand;
+
+  public Add(double leftOperand, double rightOperand) {
+    this.leftOperand = leftOperand;
+    this.rightOperand = rightOperand;
+  }
+
+  @Override
+  public void execute() {
+    System.out.println("Adding: " + leftOperand + " + " + rightOperand + " = " + (leftOperand + rightOperand));
+  }
+}
+```
+3. Create a `Context` class that will hold the list of commands and provide methods to add or remove commands as needed.
+```java
+import java.util.ArrayList;
+
+public class CalculatorContext {
+  private ArrayList<Command> commandList;
+
+  public CalculatorContext() {
+    commandList = new ArrayList<>();
+  }
+
+  public void addCommand(Command command) {
+    commandList.add(command);
+  }
+
+  public void removeCommand(Command command) {
+    commandList.remove(command);
+  }
+
+  public void executeCommands() {
+    for (Command command : commandList) {
+      command.execute();
+    }
+  }
+}
+```
+4. Use the context object to execute the commands in your main program. In this example, we'll demonstrate how
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: create Java class Book that connected to database with fields id, name. Create BookRepository and BookService that need to get, remove and update book. And create mockito test to Book class
+    ASSISTANT:
+    1. First, let's create the `Book` class with its corresponding fields and connections to the database. We will use JPA (Java Persistence API) to connect to the database. You can choose any of the popular databases like MySQL, PostgreSQL, or SQL Server as your target. For this example, I'll use MySQL.
+```java
+// Book.java
+package com.example.book;
+
+import javax.persistence.*;
+
+@Entity
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationStrategy.IDENTITY)
+    private Long id;
+    private String name;
+
+    public Book() {}
+
+    public Book(String name) {
+        this.name = name;
+    }
+
+    // Getters and setters
+}
+```
+1. Next, we'll create the `BookRepository` and `BookService`. Since both classes involve database operations, it is better to separate them into different layers for better maintainability and testability.
+```java
+// BookRepository.java
+package com.example.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface BookRepository extends JpaRepository<Book, Long> {
+    List<Book> findAll();
+}
+```
+```java
+// BookService.java
+package com.example.service;
+
+import com.example.repository.BookRepository;
+import com.example.model.Book;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+public class BookService {
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Mock
+    private BookRepository mockBookRepository;
+
+    @InjectMocks
+    private BookServiceImpl bookServiceImpl;
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testGetBook() {
+        Book book = new Book("Sample Book");
+        when(mockBookRepository.findById(any())).thenReturn(book);
+
+        Book retrievedBook = bookServiceImpl.getBook(1L);
+
+        assertNotNull(retrievedBook);
+        assertEquals("Sample Book", retrievedBook.getName());
+    }
+
+    @Test
+    public void testRemoveBook() {
+        Book book = new Book("Sample Book");
+        when(mockBookRepository.findById(any())).thenReturn(book);
+
+        bookServiceImpl.removeBook(1L);
+
+        verify(mockBookRepository).delete(book);
+    }
+
+    @Test
+    public void testUpdateBook() {
+        Book originalBook = new Book("Original Sample Book");
+        Book updatedBook = new Book("Updated Sample Book");
+        when(mockBookRepository.findById(any())).thenReturn(originalBook);
+
+        bookServiceImpl.updateBook(updatedBook.getId(), updatedBook);
+
+        verify(mockBookRepository).saveAndFlush(updatedBook);
+    }
+}
+```
+1. Finally, let's create a test class for the `BookService` using Mockito.
+```java
+// BookServiceTest.java
+package com.example.test;
+
+import com.example.model.Book;
+import com.example.repository.BookRepository;
+import com.example.service.BookService;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito
+================================================================
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+
+    USER: Database has table Teacher with fields id, name, surname and table Lesson with fields id and name, these tables has manyToMany relation, create these tables in java classes
+    ASSISTANT:
+    1. Create a Java class for the `Teacher` entity:
+```java
+import javax.persistence.*;
+
+@Entity
+public class Teacher {
+    @Id
+    @GeneratedValue(strategy = GenerationStrategy.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String surname;
+
+    // Add getter and setter methods
+
+    // Relation to Lessons
+    @OneToMany(mappedBy = "teacher")
+    private List<Lesson> lessons;
+}
+```
+1. Create a Java class for the `Lesson` entity:
+```java
+import javax.persistence.*;
+
+@Entity
+public class Lesson {
+    @Id
+    @GeneratedValue(strategy = GenerationStrategy.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    // Add getter and setter methods
+
+    // Relation to Teachers
+    @ManyToMany
+    @JoinTable(name = "lesson_teacher", joinColumns = @JoinColumn(referencedName = "id"), inverseJoinColumns = @JoinColumn(referencedName = "id"))
+    private Set<Teacher> teachers;
+}
+```
+In both classes, you can add getter and setter methods as needed. Note that I used JPA annotations to simplify the code generation process. If you are not using JPA, you will need to handle the database operations manually or use another ORM library like Hibernate.
+================================================================
