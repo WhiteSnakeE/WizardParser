@@ -1,7 +1,6 @@
 package com.sytoss.edu.library.tools.writer;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
 import java.io.File;

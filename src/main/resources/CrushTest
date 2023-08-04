@@ -1,0 +1,26 @@
+```java
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import jakarta.persistence.*;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "exams")
+public class ExamDTO {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    private String name;
+
+    private double grade;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private StudentDTO student;
+}
+```

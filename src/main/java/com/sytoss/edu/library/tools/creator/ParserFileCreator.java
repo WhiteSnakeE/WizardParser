@@ -16,11 +16,17 @@ public class ParserFileCreator {
 
     public File create(String fileExtension, String fileName, String to) {
         File file = null;
-        if (fileName.equals("pom")) {
+        if (fileExtension.equals("java")) {
+            if(fileName==null) {
+                fileName = DefoltClassName.FILE_NAME;
+            }
+
+            to = findPackageToThisClass(to, fileName);
+
+        }
+        else if (fileName.equals("pom")) {
             to = createPomFile(to);
 
-        } else if (fileExtension.equals("java")) {
-            to = findPackageToThisClass(to, fileName);
         } else {
             fileName += a;
             a++;
