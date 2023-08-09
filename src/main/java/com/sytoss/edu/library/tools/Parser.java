@@ -15,9 +15,9 @@ public class Parser {
 
     private final ParserFileReader parserFileReader;
 
-    private final String startOfFile = "^```[a-zA-Z].*$" ;
+    private static final String startOfFile = "^```[a-zA-Z].*$" ;
 
-    private final String endOfFile  = "```";
+    private static final String endOfFile  = "```";
 
     private FileStatus fileStatus = FileStatus.NOT_COMPLETED;
 
