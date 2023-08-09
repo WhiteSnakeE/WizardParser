@@ -40,21 +40,5 @@ public class ParserFileReader {
         return fileText.contains("maven.apache.org/POM");
     }
 
-//    private String findFeatureName(String fileText){
-//        if(fileText.contains("Feature") || fileText.contains("Scenario")){
-//            fileText = fileText.replaceAll("^(?:Feature:|Scenario:)","");
-//            return Arrays.stream(fileText.split("\\s+"))
-//                    .map(word -> {
-//                        if (word.length() <= 1) {
-//                            return word.toUpperCase();
-//                        }
-//                        return word.substring(0, 1).toUpperCase() + word.substring(1);
-//                    })
-//                    .collect(Collectors.joining())
-//                    .replaceAll("\\s+", "");
-//        }
-//        return null;
-//    }
-
 
 }

@@ -11,11 +11,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
+
 public class ParserFileCreator {
     private int a = 1;
 
     public File create(String fileExtension, String fileName, String to) {
-        File file = null;
+        File file;
         if (fileExtension.equals("java")) {
             if(fileName==null) {
                 fileName = DefoltClassName.FILE_NAME;
@@ -49,7 +50,7 @@ public class ParserFileCreator {
         if (matcher.find()) {
             to = to.replaceAll(regex, "");
         } else {
-            System.out.println("В строке нет 'src'.");
+            System.err.println("В строке нет 'src'.");
         }
         return to;
     }
@@ -89,8 +90,7 @@ public class ParserFileCreator {
             return to;
         } else {
             regex = "(.*java).*";
-            to = to.replaceAll(regex, "$1").replaceAll("java", "resources");
-            System.out.println(to);
+            to = to.replaceAll(regex, "$1").replace("java", "resources");
             return to;
         }
     }

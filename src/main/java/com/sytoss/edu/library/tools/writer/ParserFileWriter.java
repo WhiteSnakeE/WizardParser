@@ -10,8 +10,8 @@ import java.io.IOException;
 public class ParserFileWriter {
 
     public void writeToFile(String text, File file) {
-        FileWriter fileWriter = null;
-        BufferedWriter bufferedWriter = null;
+        FileWriter fileWriter;
+        BufferedWriter bufferedWriter;
         try {
             fileWriter = new FileWriter(file);
             bufferedWriter = new BufferedWriter(fileWriter);
