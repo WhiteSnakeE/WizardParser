@@ -23,4 +23,3 @@ public class ExamDTO {
     @JoinColumn(name = "student_id")
     private StudentDTO student;
 }
-```
