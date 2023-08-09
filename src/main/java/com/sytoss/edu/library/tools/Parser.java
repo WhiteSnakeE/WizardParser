@@ -2,14 +2,10 @@ package com.sytoss.edu.library.tools;
 
 import com.sytoss.edu.library.tools.creator.ParserFileCreator;
 import com.sytoss.edu.library.tools.handler.FileStatus;
-import com.sytoss.edu.library.tools.model.Parameters;
 import com.sytoss.edu.library.tools.reader.ParserFileReader;
 import com.sytoss.edu.library.tools.writer.ParserFileWriter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class Parser {
 
