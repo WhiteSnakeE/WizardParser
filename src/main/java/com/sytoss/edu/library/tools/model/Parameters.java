@@ -1,10 +1,8 @@
 package com.sytoss.edu.library.tools.model;
 
-import org.springframework.stereotype.Component;
-
 import java.io.File;
 
-@Component
+
 public class Parameters {
 
     private File file;
@@ -12,6 +10,8 @@ public class Parameters {
     private String extension;
 
     private String className;
+
+    private String packageName;
 
     public File getFile() {
         return file;
@@ -35,5 +35,13 @@ public class Parameters {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 }

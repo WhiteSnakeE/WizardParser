@@ -1,0 +1,41 @@
+"Below is an instruction that describes a task.Write a response that appropriately completes the request.
+### Instruction:
+
+Below is an instruction that describes a task.Write a response that appropriately completes the request.
+### Instruction:
+
+Create Java service OrderService with methods createOrder() and updateOrder() that take an order as a parameter. Use class StudentConverter to convert student to studentDTO to save in repository
+
+### Response:
+
+
+
+### Response:
+
+
+```java
+import com.example.demo.dto.StudentDTO;
+import com.example.demo.model.Student;
+import com.example.demo.repository.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class OrderService {
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    public StudentDTO createOrder(Student student) {
+        StudentDTO studentDTO = StudentConverter.convertStudentToStudentDTO(student);
+        studentRepository.save(student);
+        return studentDTO;
+    }
+
+    public StudentDTO updateOrder(Student student) {
+        StudentDTO studentDTO = StudentConverter.convertStudentToStudentDTO(student);
+        studentRepository.save(student);
+        return studentDTO;
+    }
+}
+```

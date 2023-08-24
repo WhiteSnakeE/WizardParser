@@ -3,6 +3,7 @@ package com.sytoss.edu.library.tools;
 import com.sytoss.edu.library.tools.creator.ParserFileCreator;
 import com.sytoss.edu.library.tools.handler.FileStatus;
 import com.sytoss.edu.library.tools.model.Parameters;
+import com.sytoss.edu.library.tools.reader.FileExtensionEnum;
 import com.sytoss.edu.library.tools.reader.ParserFileReader;
 import com.sytoss.edu.library.tools.writer.ParserFileWriter;
 
@@ -68,6 +69,15 @@ public class Parser {
 
     private void writeToFile(StringBuilder fileValue, String path) {
         File file = parseFile(parameters.getExtension(), parameters.getClassName(), path);
+        if (parameters.getExtension().equals(FileExtensionEnum.JAVA.extension)) {
+            parameters.setPackageName(parserFileCreator.findPackage(parameters.getClassName()));
+            if (parameters.getPackageName().isEmpty()) {
+                fileValue.insert(0, packageName(path + ";"));
+            } else {
+                fileValue.insert(0, packageName(path + "." + parameters.getPackageName() + ";"));
+            }
+
+        }
         parserFileWriter.writeToFile(fileValue.toString(), file);
         parameters.setClassName(null);
     }
@@ -77,6 +87,7 @@ public class Parser {
             writeToFile(fileValue, path);
             parameters.setClassName(null);
         }
+
         clean(fileValue);
         fileStatus = FileStatus.NOT_COMPLETED;
         String fileExtension = line.substring(3);
@@ -100,5 +111,15 @@ public class Parser {
         }
     }
 
+    private String packageName(String path) {
+        path = path.replaceAll("\\\\", ".");
+        int index = path.indexOf("java.");
+        if (index != -1) {
+            return "package " + path.substring(index + "java.".length()) + "\n" + "\n";
+        } else {
+            return "package " + path + "\n" + "\n";
+        }
+
+    }
 
 }

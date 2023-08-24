@@ -1,0 +1,89 @@
+"Doctor.java:
+```java
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Doctor {
+    private long id;
+
+    private String name;
+}
+```
+
+Patient.java:
+```java
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Patient {
+    private long id;
+
+    private String name;
+
+    private Doctor doctor;
+}
+```
+
+DoctorDTO.java:
+```java
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "DOCTOR")
+public class DoctorDTO {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "NAME")
+    private String name;
+}
+```
+
+PatientDTO.java:
+```java
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "PATIENT")
+public class PatientDTO {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "NAME")
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "DOCTOR_ID", referencedColumnName = "ID")
+    private DoctorDTO doctor;
+}
+```

@@ -1,36 +1,35 @@
 package com.sytoss.edu.library.tools.creator;
 
 import com.sytoss.edu.library.tools.reader.FileExtensionEnum;
-import org.springframework.stereotype.Component;
+
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Component
+
 
 public class ParserFileCreator {
-    private int a = 1;
 
     public File create(String fileExtension, String fileName, String to) {
         File file;
         if (fileExtension.equals("java")) {
-            if(fileName==null) {
+            if (fileName == null) {
                 fileName = DefoltClassName.FILE_NAME;
             }
 
             to = findPackageToThisClass(to, fileName);
 
-        }
-        else if (fileName.equals("pom")) {
+        } else if (fileName.equals("pom")) {
             to = createPomFile(to);
 
         } else {
-            fileName += a;
-            a++;
+            Random random = new Random();
+            fileName += (long) (random.nextDouble(0,999999999) * (Long.MAX_VALUE - Long.MIN_VALUE));
             to = createFileInResources(to, fileExtension);
         }
         file = new File(to + "\\" + fileName + "." + fileExtension);
@@ -78,6 +77,20 @@ public class ParserFileCreator {
         return to;
     }
 
+    public String findPackage(String className) {
+        List<String> packages = Arrays.stream(PackageEnum.values())
+                .map(Enum::name)
+                .toList();
+        for (String s : packages) {
+            s = s.toLowerCase();
+            if (className.toLowerCase().contains(s.toLowerCase())) {
+                return s.toLowerCase();
+            }
+
+        }
+        return "";
+    }
+
     private String createFileInResources(String to, String fileExtension) {
         String regex;
         if (fileExtension.equals(FileExtensionEnum.FEATURE.extension)) {
@@ -87,12 +100,11 @@ public class ParserFileCreator {
 
             File file = new File(to);
             file.mkdirs();
-            return to;
         } else {
             regex = "(.*java).*";
             to = to.replaceAll(regex, "$1").replace("java", "resources");
-            return to;
         }
+        return to;
     }
 
 

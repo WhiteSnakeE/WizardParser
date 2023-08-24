@@ -1,12 +1,10 @@
 package com.sytoss.edu.library.tools.writer;
 
-import org.springframework.stereotype.Component;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-@Component
+
 public class ParserFileWriter {
 
     public void writeToFile(String text, File file) {
